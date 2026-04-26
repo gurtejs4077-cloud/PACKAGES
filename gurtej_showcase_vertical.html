@@ -1,0 +1,350 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --color-background-primary: #0a0a0a;
+    --color-background-secondary: #121212;
+    --color-text-primary: #f5f5f5;
+    --color-text-secondary: #a3a3a3;
+    --color-text-tertiary: #737373;
+    --color-border-secondary: #333333;
+    --color-border-tertiary: #1f1f1f;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+
+  .wrap {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--color-border-secondary);
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .tagline {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--color-text-secondary);
+    max-width: 340px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    width: 36px;
+    height: 1px;
+    background: var(--color-border-secondary);
+    margin: 0.1rem auto;
+  }
+
+  .accordion {
+    width: 100%;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .acc-item {
+    display: flex;
+    flex-direction: column;
+    border: 0.5px solid var(--color-border-tertiary, #333);
+    border-radius: var(--border-radius-lg, 12px);
+    background: var(--color-background-primary, #111);
+    overflow: hidden;
+  }
+
+  .acc-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.1rem 1.5rem;
+    background: var(--color-background-secondary, #1a1a1a);
+    border-bottom: 0.5px solid var(--color-border-tertiary, #333);
+    gap: 1rem;
+  }
+
+  .acc-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .acc-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--color-text-primary, #fff);
+    border: 0.5px solid var(--color-border-tertiary, #333);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .acc-icon-char {
+    filter: invert(1);
+  }
+
+  .acc-title-group {}
+
+  .acc-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary, #888);
+    margin-bottom: 2px;
+  }
+
+  .acc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-text-primary, #fff);
+    line-height: 1.2;
+  }
+
+  .acc-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .acc-inner {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .acc-desc {
+    font-size: 13px;
+    color: var(--color-text-secondary, #aaa);
+    font-weight: 300;
+    line-height: 1.65;
+    padding: 1rem 0 1rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary, #333);
+    margin-bottom: 1rem;
+  }
+
+  .niches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: 10px;
+  }
+
+  .niche-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1rem 0.85rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .niche-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: var(--color-text-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .niche-card:hover {
+    border-color: var(--color-border-secondary);
+    transform: translateY(-1px);
+  }
+
+  .niche-card:hover::after {
+    transform: scaleX(1);
+  }
+
+  .niche-num {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .niche-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1.35;
+    margin-bottom: 5px;
+  }
+
+  .niche-tag {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+</style>
+<link rel="stylesheet" href="background-audio.css">
+<script src="background-audio.js" defer></script>
+
+
+<div class="wrap">
+  <div class="hero">
+    <div class="avatar"><img src="image.png" alt="Gurtej Singh"></div>
+    <div class="name">Gurtej Singh</div>
+    <div class="divider"></div>
+    <div class="tagline">Choose any business below to explore sample web designs, features & automations</div>
+  </div>
+
+  <div class="accordion">
+
+    <div class="acc-item">
+      <div class="acc-header">
+        <div class="acc-left">
+          <div class="acc-icon"><span class="acc-icon-char">⚡</span></div>
+          <div class="acc-title-group">
+            <div class="acc-label">Category 01</div>
+            <div class="acc-title">High Intent Local Services</div>
+          </div>
+        </div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-inner">
+          <div class="acc-desc">Businesses where clients are actively searching with high purchase intent — fast lead
+            conversion, appointment booking, and trust-building are the core goals for these sites.</div>
+          <div class="niches">
+            <div class="niche-card" onclick="window.location.href='gym_pricing.html'">
+              <div class="niche-num">01</div>
+              <div class="niche-name">Gyms & Fitness Centres</div>
+              <div class="niche-tag">Memberships · Class bookings · Trainer profiles</div>
+            </div>
+            <div class="niche-card" onclick="window.location.href='clinic_pricing.html'">
+              <div class="niche-num">02</div>
+              <div class="niche-name">Medical & Dental Clinics</div>
+              <div class="niche-tag">Appointments · Doctor profiles · Patient trust</div>
+            </div>
+            <div class="niche-card" onclick="window.location.href='law_pricing.html'">
+              <div class="niche-num">03</div>
+              <div class="niche-name">Law Firms & Accountants</div>
+              <div class="niche-tag">Case intake · Expertise · Lead generation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item">
+      <div class="acc-header">
+        <div class="acc-left">
+          <div class="acc-icon"><span class="acc-icon-char">✦</span></div>
+          <div class="acc-title-group">
+            <div class="acc-label">Category 02</div>
+            <div class="acc-title">Creative & Visual Professionals</div>
+          </div>
+        </div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-inner">
+          <div class="acc-desc">Portfolio-first businesses where visual storytelling wins clients. These sites
+            prioritise stunning project galleries, mood-driven layouts, and seamless enquiry flows to turn visitors into
+            paying clients.</div>
+          <div class="niches">
+            <div class="niche-card" onclick="window.location.href='photography_pricing.html'">
+              <div class="niche-num">01</div>
+              <div class="niche-name">Photography & Digital Studios</div>
+              <div class="niche-tag">Portfolio · Booking · Session packages</div>
+            </div>
+            <div class="niche-card" onclick="window.location.href='interior_pricing.html'">
+              <div class="niche-num">02</div>
+              <div class="niche-name">Interior Design & Architecture</div>
+              <div class="niche-tag">Project showcase · Mood boards · Enquiry</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item">
+      <div class="acc-header">
+        <div class="acc-left">
+          <div class="acc-icon"><span class="acc-icon-char">◎</span></div>
+          <div class="acc-title-group">
+            <div class="acc-label">Category 03</div>
+            <div class="acc-title">Food & Beverages</div>
+          </div>
+        </div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-inner">
+          <div class="acc-desc">Experience-driven dining businesses where ambiance, menu presentation, and frictionless
+            reservations drive footfall. These sites blend cinematic visuals with practical booking flows to fill tables
+            and rooms.</div>
+          <div class="niches">
+            <div class="niche-card" onclick="window.location.href='food_pricing.html'">
+              <div class="niche-num">01</div>
+              <div class="niche-name">Bakeries & Cafes</div>
+              <div class="niche-tag">Menu · Pre-orders · Loyalty & hours</div>
+            </div>
+            <div class="niche-card" onclick="window.location.href='food_pricing.html'">
+              <div class="niche-num">02</div>
+              <div class="niche-name">Restaurants & Hotels</div>
+              <div class="niche-tag">Reservations · Rooms · Fine dining experience</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

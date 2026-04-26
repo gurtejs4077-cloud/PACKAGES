@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Law Firms & Accountants - Pricing Packages</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap');
+        :root { --color-background: #0a0a0a; --color-card-bg: rgba(26,26,26,0.6); --color-text-primary: #f5f5f5; --color-text-secondary: #a3a3a3; --color-accent: #d4af37; --color-border: rgba(255,255,255,0.1); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background-color: var(--color-background); color: var(--color-text-primary); line-height: 1.6; overflow-x: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 4rem 1.5rem; }
+        .header { text-align: center; margin-bottom: 5rem; position: relative; }
+        .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff 0%, #a3a3a3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: var(--color-text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .back-btn { position: absolute; top: -2rem; left: 0; color: var(--color-text-secondary); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+        .back-btn:hover { color: var(--color-text-primary); }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: stretch; }
+        .pricing-card { background: var(--color-card-bg); backdrop-filter: blur(12px); border: 1px solid var(--color-border); border-radius: 24px; padding: 3rem 2rem; display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s; position: relative; }
+        .pricing-card:hover { transform: translateY(-10px); border-color: rgba(212,175,55,0.4); }
+        .pricing-card.featured { border-color: var(--color-accent); background: rgba(212,175,55,0.05); }
+        .featured-tag { position: absolute; top: 20px; right: -10px; background: var(--color-accent); color: #000; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 1rem; border-radius: 4px; transform: rotate(5deg); }
+        .package-name { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500; margin-bottom: 1.5rem; color: var(--color-accent); }
+        .package-price { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .package-subtitle { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 2.5rem; min-height: 3rem; }
+        .features-list { list-style: none; margin-bottom: 3rem; flex-grow: 1; }
+        .features-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; color: var(--color-text-primary); display: flex; align-items: center; gap: 0.75rem; }
+        .features-list li:last-child { border-bottom: none; }
+        .features-list li::before { content: '\2713'; color: var(--color-accent); font-weight: bold; }
+        .hosting-badge { background: rgba(212,175,55,0.12); border-radius: 8px; padding: 0.5rem 0.8rem !important; border: 1px solid rgba(212,175,55,0.35) !important; color: var(--color-accent) !important; font-weight: 700 !important; font-size: 0.88rem !important; margin-bottom: 0.5rem; }
+        .hosting-badge::before { content: '\1F310' !important; }
+        .cta-button { display: block; width: 100%; padding: 1.25rem; text-align: center; text-decoration: none; border-radius: 12px; font-weight: 600; transition: all 0.3s; cursor: pointer; }
+        .basic-btn { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-primary); }
+        .basic-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--color-text-primary); }
+        .accent-btn { background: var(--color-accent); color: #000; border: none; }
+        .accent-btn:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(212,175,55,0.2); }
+        .premium-btn { background: #fff; color: #000; border: none; }
+        .premium-btn:hover { background: #e0e0e0; }
+        .note { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 1rem; font-style: italic; opacity: 0.8; }
+        @media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; } }
+        .sample-pulse-btn { margin-top: 12px; padding: 0.8rem; font-size: 0.85rem; background: linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05)); border: 1px solid rgba(212,175,55,0.6); color: var(--color-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; position: relative; overflow: hidden; animation: borderPulse 2s infinite; text-align: center; display: block; border-radius: 12px; }
+        .sample-pulse-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent); transform: skewX(-20deg); animation: shineSweep 4s infinite; }
+        @keyframes borderPulse { 0%{box-shadow:0 0 0 0 rgba(212,175,55,0.5);}70%{box-shadow:0 0 0 12px rgba(212,175,55,0);}100%{box-shadow:0 0 0 0 rgba(212,175,55,0);} }
+        @keyframes shineSweep { 0%{left:-100%;}20%{left:200%;}100%{left:200%;} }
+    </style>
+<link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="gurtej_showcase_vertical.html" class="back-btn">&larr; Back to Showcase</a>
+        <h1>Establish Your Authority Online</h1>
+        <p>Premium web experiences tailored for Law Firms & Accountants.</p>
+    </header>
+    <div class="pricing-grid">
+        <!-- Basic -->
+        <div class="pricing-card">
+            <div class="package-name">Basic &ldquo;Professional Presence&rdquo;</div>
+            <div class="package-price">&#8377;8,000 &ndash; &#8377;13,000</div>
+            <div class="package-subtitle">Build trust and get found by clients in your area.</div>
+            <ul class="features-list">
+                <li class="hosting-badge">1 Year Free Hosting Included</li>
+                <li>Firm Profile & Team Page</li>
+                <li>Case Results & Expertise Section</li>
+                <li>Inquiry Form to Email</li>
+                <li>WhatsApp Chat Button</li>
+                <li>Basic SEO & Google Maps</li>
+                <li>Mobile Responsive Design</li>
+                
+                <li>Custom Design Modifications</li>
+            </ul>
+            <a href="tel:9501071554" class="cta-button basic-btn">Get Started</a>
+            <a href="PHOTOGRAPHYBASIC.html" class="cta-button sample-pulse-btn" style="color:var(--color-text-secondary);border-color:rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);">&#10022; View Sample Page &#10022;</a>
+        </div>
+        <!-- Pro -->
+        <div class="pricing-card featured">
+            <div class="featured-tag">The Sweet Spot</div>
+            <div class="package-name">Pro &ldquo;Practice Flow&rdquo;</div>
+            <div class="package-price">&#8377;20,000 &ndash; &#8377;35,000</div>
+            <div class="package-subtitle">Automate client intake and convert more leads.</div>
+            <ul class="features-list">
+                <li class="hosting-badge">1 Year Free Hosting Included</li>
+                <li>Everything in Basic</li>
+                <li>Practice Area Landing Pages</li>
+                <li>Automated Client Intake Form</li>
+                <li>Document Upload System</li>
+                <li>Appointment Booking Calendar</li>
+                <li>Case Status Tracker</li>
+                <li>Lead Tracking & Follow-up</li>
+                
+                <li>Custom Design Modifications</li>
+            </ul>
+            <a href="tel:9501071554" class="cta-button accent-btn">Inquire Now</a>
+            <a href="LUMIERE_REDESIGN.html" class="cta-button sample-pulse-btn">&#10022; View Sample Page &#10022;</a>
+            <p class="note">* Includes monthly maintenance &amp; Ops fee (&#8377;400&ndash;&#8377;1,500/mo)</p>
+        </div>
+        <!-- Premium -->
+        <div class="pricing-card">
+            <div class="package-name">Premium &ldquo;Global Firm&rdquo;</div>
+            <div class="package-price">&#8377;45,000 &ndash; &#8377;75,000+</div>
+            <div class="package-subtitle">Full case management system for established firms.</div>
+            <ul class="features-list">
+                <li class="hosting-badge">1 Year Free Hosting Included</li>
+                <li>Everything in Professional</li>
+                <li>Secure Client Login Portal</li>
+                <li>Encrypted Document Management</li>
+                <li>Full Case Management System</li>
+                <li>Billing & Invoice Generator</li>
+                <li>Team Collaboration Dashboard</li>
+                <li>Custom Admin Panel</li>
+                
+                <li>Custom Design Modifications</li>
+            </ul>
+            <a href="tel:9501071554" class="cta-button premium-btn">Book Strategy Call</a>
+            <div style="margin-top:12px;padding:0.8rem;border-radius:12px;border:1px solid rgba(212,175,55,0.6);background:rgba(212,175,55,0.15);text-align:center;color:var(--color-accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;box-shadow:inset 0 0 10px rgba(212,175,55,0.2);">&#128274; Sample Page Available on Order Only</div>
+            <p class="note">* Includes monthly payments for API &amp; advanced hosting</p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

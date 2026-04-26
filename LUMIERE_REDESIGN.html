@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumière Studio — Where Light Becomes Art</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@400;600;700;800&family=Crimson+Pro:ital,wght@0,200;0,300;1,200;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#060608;
+  --void:#0a090e;
+  --deep:#100f16;
+  --cave:#1a1824;
+  --dusk:#2d2b3d;
+  --gold:#d4a853;
+  --gold2:#f0c97a;
+  --gold3:#8b6a2e;
+  --cream:#f8f3ea;
+  --fog:#b8b0a2;
+  --silver:#e8e4de;
+  --accent:#c97b5a;
+  --blue:#4a6fa5;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;font-size:16px}
+body{background:var(--void);color:var(--cream);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:exclusion}
+#cur-trail{position:fixed;width:36px;height:36px;border:1px solid rgba(212,168,83,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .08s linear}
+body.hovering #cur{width:24px;height:24px;background:var(--gold2)}
+body.hovering #cur-trail{width:56px;height:56px;border-color:rgba(240,201,122,.5)}
+
+/* ── FLOATING ORBS ── */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.orb1{width:600px;height:600px;top:-200px;left:-200px;background:radial-gradient(circle,rgba(212,168,83,.06) 0%,transparent 65%);animation:orbFloat1 18s ease-in-out infinite alternate}
+.orb2{width:500px;height:500px;bottom:-150px;right:-150px;background:radial-gradient(circle,rgba(201,123,90,.05) 0%,transparent 65%);animation:orbFloat2 22s ease-in-out infinite alternate}
+.orb3{width:300px;height:300px;top:50%;left:60%;background:radial-gradient(circle,rgba(74,111,165,.04) 0%,transparent 65%);animation:orbFloat3 15s ease-in-out infinite alternate}
+@keyframes orbFloat1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(80px,60px) scale(1.15)}}
+@keyframes orbFloat2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-60px,-80px) scale(1.1)}}
+@keyframes orbFloat3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-40px,60px) scale(.9)}}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:.4}
+
+/* ── CURTAIN ── */
+#curtain{position:fixed;inset:0;background:var(--ink);z-index:8000;pointer-events:none;transform:scaleY(0);transform-origin:top;transition:transform .5s cubic-bezier(.77,0,.18,1)}
+#curtain.in{transform:scaleY(1);transform-origin:top;pointer-events:all}
+#curtain.out{transform:scaleY(0);transform-origin:bottom}
+
+/* ── NAVBAR ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:22px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(6,6,8,.75);backdrop-filter:blur(20px) saturate(200%);border-bottom:1px solid rgba(212,168,83,.08);padding:14px 60px}
+.logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;letter-spacing:.05em;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:4px}
+.logo-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;margin-bottom:2px;animation:logoPulse 3s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:var(--fog);text-decoration:none;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;transition:color .3s;position:relative;cursor:none}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .35s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:16px}
+.btn-portal{padding:9px 22px;background:rgba(212,168,83,.08);backdrop-filter:blur(10px);border:1px solid rgba(212,168,83,.3);color:var(--gold);font-family:'Syne',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;cursor:none;transition:all .3s;position:relative;overflow:hidden}
+.btn-portal:hover{background:var(--gold);color:var(--ink);border-color:transparent}
+.btn-portal span{position:relative;z-index:1}
+.btn-book{padding:9px 22px;background:rgba(212,168,83,0.15);backdrop-filter:blur(10px);border:1px solid rgba(212,168,83,0.4);color:var(--gold);font-family:'Syne',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;cursor:none;transition:all .3s}
+.btn-book:hover{background:var(--gold);color:var(--ink);transform:translateY(-2px)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px}
+.hamburger span{display:block;width:24px;height:1.5px;background:var(--cream);transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;position:relative;z-index:2}
+.page.active{display:block}
+
+/* ── HERO ── */
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);transition:transform 10s ease-out;filter:brightness(.45) saturate(1.2)}
+.hero-bg.loaded img{transform:scale(1)}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(6,6,8,.6) 0%,rgba(6,6,8,.2) 40%,rgba(6,6,8,.7) 100%)}
+/* Floating film grain on hero */
+.hero-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.07'/%3E%3C/svg%3E");z-index:1;animation:grainShift 1.2s steps(2) infinite;pointer-events:none}
+@keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-1%,-1%)}50%{transform:translate(1%,1%)}75%{transform:translate(-1%,1%)}100%{transform:translate(1%,-1%)}}
+/* Floating particles */
+.hero-particles{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:particleFloat linear infinite}
+@keyframes particleFloat{0%{opacity:0;transform:translateY(100vh) translateX(0)}10%{opacity:.6}90%{opacity:.2}100%{opacity:0;transform:translateY(-10vh) translateX(20px)}}
+.hero-content{position:relative;z-index:3;text-align:center;padding:0 24px;max-width:1000px}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border:1px solid rgba(212,168,83,.3);background:rgba(212,168,83,.06);backdrop-filter:blur(10px);margin-bottom:36px;opacity:0;animation:fadeUp .8s .3s forwards}
+.hero-badge-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:logoPulse 2s infinite}
+.hero-badge span{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,9vw,8.5rem);font-weight:900;line-height:.88;letter-spacing:-.02em;color:var(--silver);opacity:0;animation:fadeUp .9s .5s forwards}
+.hero-title em{font-style:italic;color:var(--gold);font-weight:400}
+.hero-title .word-float{display:inline-block;animation:heroWordFloat 6s ease-in-out infinite alternate}
+.hero-title .word-float2{animation-delay:1.5s;animation-duration:7s}
+@keyframes heroWordFloat{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
+.hero-sub{font-family:'Crimson Pro',serif;font-size:clamp(1.1rem,2.5vw,1.8rem);font-weight:200;font-style:italic;color:rgba(184,176,162,.8);margin-top:20px;letter-spacing:.06em;opacity:0;animation:fadeUp .8s .75s forwards}
+.hero-cta{display:flex;gap:16px;justify-content:center;margin-top:48px;opacity:0;animation:fadeUp .8s .95s forwards}
+.btn-prim{padding:14px 44px;background:rgba(212,168,83,0.15);backdrop-filter:blur(15px);border:1px solid rgba(212,168,83,0.5);color:var(--gold);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;cursor:none;transition:all .3s;font-family:'Syne',sans-serif;box-shadow: 0 10px 30px rgba(0,0,0,0.2)}
+.btn-prim:hover{background:var(--gold);color:var(--ink);transform:translateY(-3px);box-shadow:0 15px 35px rgba(212,168,83,.3)}
+.btn-ghost{padding:14px 44px;background:rgba(255,255,255,0.03);backdrop-filter:blur(10px);color:var(--cream);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;border:1px solid rgba(248,243,234,.15);cursor:none;transition:all .3s;font-family:'Syne',sans-serif}
+.btn-ghost:hover{background:rgba(255,255,255,0.08);border-color:rgba(248,243,234,.5);transform:translateY(-2px)}
+.hero-scroll-indicator{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp .7s 1.4s forwards;z-index:3}
+.scroll-txt{font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--fog)}
+.scroll-track{width:1px;height:70px;background:linear-gradient(to bottom,var(--gold),transparent);position:relative;overflow:hidden}
+.scroll-track::after{content:'';position:absolute;top:0;left:0;width:100%;height:50%;background:var(--cream);animation:scrollDrop 2.2s ease-in-out infinite}
+@keyframes scrollDrop{0%{top:-50%;opacity:1}100%{top:120%;opacity:0}}
+/* Floating side text */
+.hero-side-text{position:absolute;right:44px;top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:center;font-size:.55rem;letter-spacing:.5em;text-transform:uppercase;color:rgba(184,176,162,.4);z-index:3;white-space:nowrap;opacity:0;animation:fadeIn 1s 1.6s forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── SCROLL REVEAL ── */
+.reveal,.reveal-l,.reveal-r{opacity:0;transition:opacity .8s,transform .8s}
+.reveal{transform:translateY(40px)}
+.reveal-l{transform:translateX(-50px)}
+.reveal-r{transform:translateX(50px)}
+.reveal.vis,.reveal-l.vis,.reveal-r.vis{opacity:1;transform:none}
+
+/* ── STATS ── */
+.stats-band{padding:0;position:relative;overflow:hidden;z-index:10}
+.stats-inner{display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,0.03);backdrop-filter:blur(30px) saturate(150%);border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
+.stat-item{padding:44px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden}
+.stat-item::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .5s}
+.stat-item:hover::before{transform:scaleX(1)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:900;color:var(--gold);line-height:1}
+.stat-label{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--fog);margin-top:8px;font-weight:600}
+
+/* ── SECTION COMMONS ── */
+section{padding:130px 0;position:relative}
+.container{max-width:1260px;margin:0 auto;padding:0 64px}
+.sec-tag{font-size:.58rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.sec-tag::before{content:'';display:block;width:32px;height:1px;background:var(--gold)}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4.8rem);font-weight:900;line-height:.95;letter-spacing:-.02em;color:var(--silver)}
+.sec-title em{font-style:italic;font-weight:400;color:var(--gold)}
+.divider-gold{width:48px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:28px 0}
+
+/* ── WORK GRID ── */
+.work-grid{display:grid;grid-template-columns:1.5fr 1fr;grid-template-rows:520px 340px;gap:4px;margin-top:64px}
+.work-card{position:relative;overflow:hidden;cursor:none}
+.work-card:first-child{grid-row:1/3}
+.work-card img{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.22,.68,0,1.2),filter .6s;filter:brightness(.8) saturate(.9)}
+.work-card:hover img{transform:scale(1.08);filter:brightness(.95) saturate(1.1)}
+.work-overlay{position:absolute;inset:0;background:rgba(6,6,8,0.2);backdrop-filter:blur(4px);opacity:0;transition:opacity .4s}
+.work-card:hover .work-overlay{opacity:1}
+.work-info{position:absolute;bottom:20px;left:20px;right:20px;padding:28px 32px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);transform:translateY(8px);transition:transform .4s}
+.work-card:hover .work-info{transform:translateY(0)}
+.work-cat{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:600}
+.work-name{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--silver)}
+/* Floating label on cards */
+.work-float-label{position:absolute;top:20px;right:20px;padding:5px 14px;background:rgba(6,6,8,.6);backdrop-filter:blur(8px);border:1px solid rgba(212,168,83,.25);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateY(-6px);transition:all .4s}
+.work-card:hover .work-float-label{opacity:1;transform:translateY(0)}
+
+/* ── MARQUEE ── */
+.marquee-band{overflow:hidden;padding:22px 0;background:linear-gradient(90deg,var(--gold3),var(--gold),var(--gold2),var(--gold),var(--gold3));background-size:200% 100%;animation:gradientShift 6s linear infinite}
+@keyframes gradientShift{0%{background-position:0%}100%{background-position:200%}}
+.marquee-track{display:flex;animation:marquee 22s linear infinite;white-space:nowrap}
+.marquee-track2{animation-direction:reverse;animation-duration:18s}
+.marquee-item{font-family:'Playfair Display',serif;font-size:1rem;letter-spacing:.12em;color:var(--ink);padding:0 36px;flex-shrink:0;font-style:italic}
+.marquee-sep{color:rgba(0,0,0,.4)}
+
+/* ── APPROACH ── */
+.approach-wrap{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;margin-top:80px}
+.approach-visual{position:relative}
+.approach-img-main{width:100%;aspect-ratio:3/4;object-fit:cover;filter:saturate(.8) brightness(.9)}
+/* Floating accent card on approach image */
+.approach-float-card{position:absolute;bottom:-28px;right:-32px;width:200px;background:rgba(16,15,22,.85);backdrop-filter:blur(20px);border:1px solid rgba(212,168,83,.2);padding:24px;z-index:2}
+.afc-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--gold);line-height:1}
+.afc-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fog);margin-top:4px}
+.approach-border-deco{position:absolute;top:-16px;left:-16px;right:16px;bottom:16px;border:1px solid rgba(212,168,83,.15);z-index:-1}
+.approach-text-bg{position:absolute;bottom:-40px;left:-10px;font-family:'Playfair Display',serif;font-size:5rem;font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(212,168,83,.07);letter-spacing:.05em;z-index:-1;white-space:nowrap;pointer-events:none}
+.approach-steps{display:flex;flex-direction:column;gap:36px}
+.step{display:flex;gap:24px;align-items:flex-start}
+.step-num{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);font-weight:900;min-width:40px;padding-top:2px;opacity:.6}
+.step-body h4{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--silver);margin-bottom:8px}
+.step-body p{font-size:.95rem;color:var(--fog);line-height:1.75;font-family:'Crimson Pro',serif;font-weight:300}
+
+/* ── PARALLAX STRIP ── */
+.pstrip{height:360px;position:relative;overflow:hidden}
+.pstrip-img{width:100%;height:140%;object-fit:cover;position:absolute;top:-20%;filter:brightness(.35) saturate(.7)}
+.pstrip-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;background:linear-gradient(90deg,rgba(6,6,8,.4),transparent,rgba(6,6,8,.4))}
+.pstrip-quote{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,3rem);font-style:italic;font-weight:400;color:var(--silver);text-align:center;max-width:800px;padding:0 48px;line-height:1.3}
+.pstrip-quote em{color:var(--gold);font-style:normal;font-weight:700}
+
+/* ── TESTIMONIALS ── */
+.testimonials-wrap{margin-top:72px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.testi-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(30px) saturate(120%);padding:44px 36px;border:1px solid rgba(255,255,255,0.1);position:relative;overflow:hidden;transition:all .4s}
+.testi-card:hover{background:rgba(255,255,255,0.06);border-color:var(--gold);transform:translateY(-8px)}
+.testi-card::before{content:'\201C';position:absolute;top:-10px;left:24px;font-family:'Playfair Display',serif;font-size:8rem;color:rgba(212,168,83,0.1);line-height:1;pointer-events:none}
+.testi-stars{color:var(--gold);font-size:.7rem;letter-spacing:3px;margin-bottom:20px}
+.testi-text{font-family:'Crimson Pro',serif;font-size:1.05rem;line-height:1.75;color:var(--fog);font-weight:300;margin-bottom:24px;font-style:italic}
+.testi-client{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+
+/* ── PORTFOLIO ── */
+.portfolio-hero{height:60vh;min-height:380px;display:flex;align-items:flex-end;position:relative;overflow:hidden;padding-bottom:70px}
+.portfolio-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.3) saturate(.8)}
+.portfolio-hero-content{position:relative;z-index:2;padding:0 64px}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin:44px 0 36px}
+.filter-btn{padding:9px 24px;background:transparent;border:1px solid rgba(212,168,83,.2);color:var(--fog);font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:none;transition:all .3s}
+.filter-btn.active,.filter-btn:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.masonry{columns:3;column-gap:4px;margin-bottom:4px}
+.mitem{break-inside:avoid;margin-bottom:4px;position:relative;overflow:hidden;cursor:none}
+.mitem img{width:100%;display:block;object-fit:cover;transition:transform .8s cubic-bezier(.22,.68,0,1.2),filter .5s;filter:brightness(.85) saturate(.9)}
+.mitem:hover img{transform:scale(1.06);filter:brightness(1) saturate(1.1)}
+.mitem-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,8,.85) 0%,transparent 55%);opacity:0;transition:opacity .4s}
+.mitem:hover .mitem-overlay{opacity:1}
+.mitem-info{position:absolute;bottom:0;left:0;right:0;padding:20px 22px;transform:translateY(8px);transition:transform .35s}
+.mitem:hover .mitem-info{transform:translateY(0)}
+.mitem-cat{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:4px}
+.mitem-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--silver);font-weight:700}
+
+/* ── TEAM ── */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:64px}
+.team-card{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:none}
+.team-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s,filter .6s;filter:brightness(.75) saturate(.8)}
+.team-card:hover img{transform:scale(1.07);filter:brightness(.9) saturate(1)}
+.team-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,8,.92) 0%,rgba(6,6,8,.3) 50%,transparent 100%);transition:opacity .4s}
+.team-info{position:absolute;bottom:0;left:0;right:0;padding:32px 28px}
+.team-role{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:6px}
+.team-name{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--silver);margin-bottom:0;line-height:1}
+.team-bio{font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--fog);margin-top:10px;line-height:1.6;max-height:0;overflow:hidden;transition:max-height .5s,opacity .4s;opacity:0}
+.team-card:hover .team-bio{max-height:100px;opacity:1}
+.team-socials{display:flex;gap:10px;margin-top:12px;opacity:0;transition:opacity .4s .1s}
+.team-card:hover .team-socials{opacity:1}
+.team-socials a{font-size:.58rem;letter-spacing:.15em;color:var(--gold);text-decoration:none;text-transform:uppercase;font-weight:600;cursor:none;border-bottom:1px solid rgba(212,168,83,.3);padding-bottom:1px;transition:border-color .3s}
+.team-socials a:hover{border-color:var(--gold)}
+
+/* ── SERVICES ── */
+.services-hero{height:55vh;display:flex;align-items:flex-end;position:relative;overflow:hidden;padding-bottom:64px}
+.services-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.25) saturate(.7)}
+.services-hero-content{position:relative;z-index:2;padding:0 64px}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:72px}
+.srv-card{background:rgba(255,255,255,0.02);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);padding:48px 36px;transition:all .4s;position:relative;overflow:hidden;cursor:none}
+.srv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .5s}
+.srv-card:hover{border-color:var(--gold);background:rgba(255,255,255,0.05);transform:translateY(-8px)}
+.srv-card:hover::before{transform:scaleX(1)}
+.srv-icon{font-size:1.4rem;margin-bottom:24px;color:var(--gold);opacity:.8}
+.srv-name{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--silver);margin-bottom:14px}
+.srv-desc{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--fog);line-height:1.75;margin-bottom:24px}
+.srv-price{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold)}
+.srv-price-note{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fog);margin-top:4px}
+.srv-includes{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:8px}
+.srv-includes li{font-size:.82rem;color:var(--fog);display:flex;align-items:center;gap:8px}
+.srv-includes li::before{content:'✦';color:var(--gold);font-size:.5rem}
+
+/* ── BOOKING ── */
+.booking-wrap{display:grid;grid-template-columns:1fr 1.3fr;min-height:100vh}
+.booking-info{background:rgba(255,255,255,0.03);backdrop-filter:blur(40px);border-right:1px solid rgba(255,255,255,0.1);padding:100px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.booking-info::before{content:'LUMIÈRE';position:absolute;bottom:-20px;left:-10px;font-family:'Playfair Display',serif;font-size:10rem;font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);letter-spacing:.02em;pointer-events:none}
+.booking-info-points{margin-top:40px;display:flex;flex-direction:column;gap:24px}
+.bip{display:flex;gap:16px;align-items:flex-start}
+.bip-icon{width:36px;height:36px;background:rgba(212,168,83,.1);border:1px solid rgba(212,168,83,.2);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.bip-title{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--gold);margin-bottom:4px}
+.bip-text{font-size:.88rem;color:var(--fog);line-height:1.6}
+.booking-form-area{padding:100px 64px;background:rgba(255,255,255,0.02);backdrop-filter:blur(20px)}
+.form-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;color:var(--silver);line-height:1}
+.form-title em{color:var(--gold);font-weight:400;font-style:italic}
+.booking-form{margin-top:44px;display:flex;flex-direction:column;gap:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg{display:flex;flex-direction:column;gap:8px}
+.fg label{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--fog);font-weight:600}
+.fg input,.fg select,.fg textarea{background:rgba(26,24,36,.6);border:1px solid rgba(212,168,83,.15);color:var(--cream);padding:14px 18px;font-family:'Syne',sans-serif;font-size:.88rem;transition:border-color .3s,background .3s;outline:none;cursor:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(212,168,83,.5);background:rgba(26,24,36,.9)}
+.fg select option{background:var(--deep)}
+.fg textarea{resize:vertical;min-height:90px}
+.submit-btn{padding:16px;background:rgba(212,168,83,0.15);backdrop-filter:blur(10px);border:1px solid rgba(212,168,83,0.4);color:var(--gold);font-family:'Syne',sans-serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;cursor:none;transition:all .3s;margin-top:8px}
+.submit-btn:hover{background:var(--gold);color:var(--ink);transform:translateY(-2px);box-shadow:0 12px 30px rgba(212,168,83,.3)}
+
+/* ── CONTACT ── */
+.contact-hero{height:50vh;display:flex;align-items:flex-end;position:relative;overflow:hidden;padding-bottom:60px}
+.contact-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.2) saturate(.6)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:80px;align-items:start;margin-top:72px}
+.contact-info h3{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--silver);line-height:1.1;margin-bottom:24px}
+.contact-info h3 em{color:var(--gold);font-style:italic;font-weight:400}
+.contact-points{display:flex;flex-direction:column;gap:24px;margin-top:32px}
+.cp{display:flex;flex-direction:column;gap:3px}
+.cp-label{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.cp-val{font-size:1rem;color:var(--silver)}
+.cp-val a{color:var(--silver);text-decoration:none;transition:color .3s}
+.cp-val a:hover{color:var(--gold)}
+.social-row{display:flex;gap:10px;margin-top:36px}
+.soc-btn{width:44px;height:44px;background:rgba(212,168,83,.08);border:1px solid rgba(212,168,83,.2);display:flex;align-items:center;justify-content:center;font-size:.62rem;letter-spacing:.08em;color:var(--gold);text-decoration:none;transition:all .3s;cursor:none;font-weight:700}
+.soc-btn:hover{background:var(--gold);color:var(--ink)}
+.contact-form-area{display:flex;flex-direction:column;gap:18px}
+
+/* ── CLIENT PROOFING PORTAL ── */
+#portal-overlay{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s}
+#portal-overlay.open{opacity:1;pointer-events:all}
+.portal-backdrop{position:absolute;inset:0;background:rgba(6,6,8,0.4);backdrop-filter:blur(15px);cursor:none}
+.portal-box{position:relative;z-index:1;width:100%;max-width:500px;margin:24px;background:rgba(255,255,255,0.03);backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,0.15);padding:0;overflow:hidden;transform:translateY(30px) scale(.97);transition:transform .5s;box-shadow: 0 40px 100px rgba(0,0,0,0.5)}
+#portal-overlay.open .portal-box{transform:translateY(0) scale(1)}
+.portal-header{padding:40px 44px 32px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.1);position:relative}
+.portal-close{position:absolute;top:20px;right:20px;width:36px;height:36px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--gold);font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .3s;border-radius:0}
+.portal-close:hover{background:var(--gold);color:var(--ink);border-color:transparent}
+.portal-icon{width:52px;height:52px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px}
+.portal-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;color:var(--silver);line-height:1.1}
+.portal-title em{color:var(--gold);font-style:italic;font-weight:400}
+.portal-sub{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--fog);margin-top:8px;font-style:italic}
+.portal-body{padding:36px 44px 44px}
+.portal-form{display:flex;flex-direction:column;gap:18px}
+.portal-label{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--fog);font-weight:600;margin-bottom:8px;display:block}
+.portal-input{width:100%;background:rgba(10,9,14,.8);border:1px solid rgba(212,168,83,.15);color:var(--cream);padding:14px 18px;font-family:'Syne',sans-serif;font-size:.9rem;outline:none;transition:border-color .3s;cursor:none}
+.portal-input:focus{border-color:rgba(212,168,83,.5)}
+.portal-error{font-size:.78rem;color:#e07070;margin-top:-10px;display:none}
+.portal-btn{width:100%;padding:15px;background:rgba(212,168,83,0.15);backdrop-filter:blur(10px);border:1px solid rgba(212,168,83,0.4);color:var(--gold);font-family:'Syne',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;cursor:none;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden}
+.portal-btn:hover{background:var(--gold);color:var(--ink);box-shadow:0 16px 40px rgba(212,168,83,.4)}
+.portal-divider{display:flex;align-items:center;gap:16px;margin:4px 0}
+.portal-divider-line{flex:1;height:1px;background:rgba(212,168,83,.1)}
+.portal-divider-text{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fog)}
+.portal-note{font-size:.75rem;color:var(--fog);text-align:center;font-family:'Crimson Pro',serif;font-style:italic;line-height:1.6}
+.portal-note a{color:var(--gold);text-decoration:none}
+/* Gallery view */
+.portal-gallery{display:none;flex-direction:column;gap:28px}
+.gallery-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.gallery-client-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--silver)}
+.gallery-session-info{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fog)}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:8px}
+.gallery-thumb{aspect-ratio:1;overflow:hidden;cursor:none;position:relative}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s;filter:brightness(.85)}
+.gallery-thumb:hover img{transform:scale(1.07);filter:brightness(1)}
+.gallery-thumb-overlay{position:absolute;inset:0;background:rgba(6,6,8,.5);opacity:0;transition:opacity .3s;display:flex;align-items:center;justify-content:center;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.gallery-thumb:hover .gallery-thumb-overlay{opacity:1}
+.gallery-actions{display:flex;gap:10px;margin-top:16px}
+.gallery-btn{flex:1;padding:12px;border:1px solid rgba(212,168,83,.25);background:transparent;color:var(--gold);font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;cursor:none;transition:all .3s}
+.gallery-btn:hover{background:rgba(212,168,83,.1)}
+.gallery-btn.primary{background:rgba(212,168,83,0.2);backdrop-filter:blur(10px);border:1px solid rgba(212,168,83,0.5);color:var(--gold);font-weight:700}
+.gallery-btn.primary:hover{background:var(--gold);color:var(--ink);box-shadow:0 8px 24px rgba(212,168,83,.3)}
+
+/* ── FOOTER ── */
+footer{background:rgba(6,6,8,.9);border-top:1px solid rgba(212,168,83,.08);padding:80px 0 32px}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:48px;margin-bottom:60px}
+.footer-brand p{font-size:.88rem;color:var(--fog);line-height:1.7;margin-top:14px;font-family:'Crimson Pro',serif}
+.footer-col h4{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:20px}
+.footer-col a{display:block;font-size:.88rem;color:var(--fog);text-decoration:none;margin-bottom:10px;transition:color .3s;cursor:none}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid rgba(212,168,83,.06);padding-top:24px;display:flex;align-items:center;justify-content:space-between}
+.footer-copy{font-size:.7rem;letter-spacing:.1em;color:rgba(184,176,162,.4)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{font-size:.65rem;color:rgba(184,176,162,.4);text-decoration:none;transition:color .3s;cursor:none}
+.footer-legal a:hover{color:var(--gold)}
+/* Floating portal button in footer */
+.footer-portal-cta{background:linear-gradient(135deg,rgba(212,168,83,.08),rgba(212,168,83,.03));border:1px solid rgba(212,168,83,.2);padding:24px 28px;display:flex;align-items:center;gap:16px;cursor:none;transition:all .4s;margin-top:32px}
+.footer-portal-cta:hover{background:rgba(212,168,83,.12);border-color:rgba(212,168,83,.4);transform:translateY(-2px)}
+.fpc-icon{font-size:1.5rem}
+.fpc-title{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:4px}
+.fpc-sub{font-size:.8rem;color:var(--fog);font-family:'Crimson Pro',serif;font-style:italic}
+.fpc-arrow{margin-left:auto;color:var(--gold);font-size:1.2rem;transition:transform .3s}
+.footer-portal-cta:hover .fpc-arrow{transform:translateX(4px)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:32px;right:32px;background:rgba(16,15,22,.95);border:1px solid rgba(212,168,83,.25);backdrop-filter:blur(20px);padding:20px 24px;max-width:320px;transform:translateX(120%);transition:transform .4s cubic-bezier(.22,.68,0,1.2);z-index:7000}
+.toast.show{transform:translateX(0)}
+.toast-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:4px}
+.toast-msg{font-size:.88rem;color:var(--fog);font-family:'Crimson Pro',serif}
+
+/* ── MOBILE MENU ── */
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(6,6,8,.98);backdrop-filter:blur(24px);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:8px;transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.18,1)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu nav-item{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:var(--silver);text-decoration:none;transition:color .3s}
+.mobile-menu-nav{list-style:none;text-align:center;display:flex;flex-direction:column;gap:4px}
+.mobile-menu-nav a{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--fog);text-decoration:none;display:block;padding:12px;transition:color .4s;cursor:none}
+.mobile-menu-nav a:hover{color:var(--gold)}
+.mobile-menu-btns{display:flex;flex-direction:column;gap:12px;margin-top:32px;width:220px}
+.mobile-menu-book{padding:14px;background:var(--gold);color:var(--ink);font-family:'Syne',sans-serif;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;border:none;cursor:none;width:100%}
+.mobile-menu-portal{padding:14px;background:transparent;border:1px solid rgba(212,168,83,.4);color:var(--gold);font-family:'Syne',sans-serif;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;cursor:none;width:100%}
+.mobile-menu-tagline{position:absolute;bottom:32px;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(184,176,162,.3)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── FLOATING ELEMENTS (decorative) ── */
+.float-ring{position:absolute;border-radius:50%;border:1px solid rgba(212,168,83,.08);pointer-events:none;animation:ringFloat ease-in-out infinite alternate}
+@keyframes ringFloat{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(20px,-30px) rotate(15deg)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:18px 24px}
+  nav.scrolled{padding:12px 24px}
+  .nav-links,.nav-right .btn-portal,.nav-right .btn-book{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{display:flex}
+  .container{padding:0 24px}
+  .work-grid{grid-template-columns:1fr;grid-template-rows:auto;height:auto}
+  .work-grid .work-card{height:300px}
+  .work-card:first-child{grid-row:auto}
+  .approach-wrap{grid-template-columns:1fr;gap:48px}
+  .approach-float-card{position:static;width:auto;margin-top:16px}
+  .testimonials-wrap{grid-template-columns:1fr}
+  .masonry{columns:2}
+  .team-grid{grid-template-columns:1fr}
+  .team-card{aspect-ratio:4/3}
+  .services-grid{grid-template-columns:1fr}
+  .booking-wrap{grid-template-columns:1fr}
+  .booking-info{padding:64px 24px 48px}
+  .booking-form-area{padding:48px 24px}
+  .contact-grid{grid-template-columns:1fr;gap:48px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .portfolio-hero-content,.services-hero-content{padding:0 24px}
+  .pstrip-quote{padding:0 24px}
+  section{padding:80px 0}
+  .hero-side-text{display:none}
+  .portal-box{margin:16px}
+  .portal-header,.portal-body{padding:28px 28px}
+  .portal-header{padding-bottom:24px}
+}
+@media(max-width:600px){
+  .masonry{columns:1}
+  .footer-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  .hero-cta{flex-direction:column;align-items:center}
+  .booking-info::before{font-size:5rem}
+}
+</style>
+<link rel="stylesheet" href="background-audio.css">
+<script src="background-audio.js" defer></script>
+</head>
+<body>
+
+<!-- FLOATING ORB AMBIENCE -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-trail"></div>
+
+<!-- PAGE CURTAIN -->
+<div id="curtain"></div>
+
+<!-- CLIENT PROOFING PORTAL OVERLAY -->
+<div id="portal-overlay">
+  <div class="portal-backdrop" onclick="closePortal()"></div>
+  <div class="portal-box">
+    <div class="portal-header">
+      <button class="portal-close" onclick="closePortal()">✕</button>
+      <div class="portal-icon">🔐</div>
+      <div class="portal-title">Client <em>Proofing</em> Portal</div>
+      <div class="portal-sub">Access your private photo gallery</div>
+    </div>
+    <div class="portal-body">
+      <!-- Login Form -->
+      <div id="portal-login">
+        <div class="portal-form">
+          <div class="fg">
+            <label class="portal-label">Your Name or Client Code</label>
+            <input type="text" class="portal-input" id="portal-name" placeholder="e.g. Arjun & Priya Wedding" autocomplete="off">
+          </div>
+          <div class="fg">
+            <label class="portal-label">Secure Access Password</label>
+            <input type="password" class="portal-input" id="portal-pass" placeholder="Enter your private password" onkeydown="if(event.key==='Enter')tryLogin()">
+            <div class="portal-error" id="portal-err">❌ Incorrect password. Please try again or contact us.</div>
+          </div>
+          <div class="portal-divider">
+            <div class="portal-divider-line"></div>
+            <span class="portal-divider-text">Secure Access</span>
+            <div class="portal-divider-line"></div>
+          </div>
+          <button class="portal-btn" onclick="tryLogin()">
+            <span>🔓 Access My Gallery</span>
+          </button>
+          <div class="portal-note">
+            Don't have a password? <a href="#" onclick="closePortal();showPage('contact');return false;">Contact us</a> after your session.<br>
+            Your photos are stored securely for 90 days.
+          </div>
+        </div>
+      </div>
+      <!-- Gallery View (shown after login) -->
+      <div id="portal-gallery-view" class="portal-gallery">
+        <div class="gallery-header">
+          <div>
+            <div class="gallery-client-name" id="gallery-client-name">Arjun & Priya — Wedding</div>
+            <div class="gallery-session-info">Session · Dec 2024 · 48 Photos</div>
+          </div>
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);cursor:pointer" onclick="logoutPortal()">← Logout</div>
+        </div>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <div class="gallery-actions">
+          <button class="gallery-btn" onclick="showToast('Download Ready!','Your full resolution gallery download link will be emailed to you shortly.')">⬇ Download All</button>
+          <button class="gallery-btn primary" onclick="showToast('Favorites Saved ✦','We\'ve noted your favorite selections. Our team will prepare your final prints.')">★ Select Favorites</button>
+        </div>
+        <div class="portal-note" style="margin-top:8px">Gallery access expires in <strong style="color:var(--gold)">47 days</strong>. Download your photos to keep them forever.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="logo" onclick="showPage('home');return false;">
+    <span>LUMIÈRE</span>
+    <div class="logo-dot"></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" data-page="home" class="active" onclick="showPage('home');return false;">Home</a></li>
+    <li><a href="#" data-page="portfolio" onclick="showPage('portfolio');return false;">Portfolio</a></li>
+    <li><a href="#" data-page="team" onclick="showPage('team');return false;">Our Team</a></li>
+    <li><a href="#" data-page="services" onclick="showPage('services');return false;">Services</a></li>
+    <li><a href="#" data-page="contact" onclick="showPage('contact');return false;">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-portal" onclick="openPortal()"><span>🔐 Client Portal</span></button>
+    <button class="btn-book" onclick="showPage('booking')">Book Session</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-menu-nav">
+    <li><a href="#" onclick="mobileNav('home')">Home</a></li>
+    <li><a href="#" onclick="mobileNav('portfolio')">Portfolio</a></li>
+    <li><a href="#" onclick="mobileNav('team')">Team</a></li>
+    <li><a href="#" onclick="mobileNav('services')">Services</a></li>
+    <li><a href="#" onclick="mobileNav('contact')">Contact</a></li>
+  </ul>
+  <div class="mobile-menu-btns">
+    <button class="mobile-menu-book" onclick="mobileNav('booking')">Book a Session</button>
+    <button class="mobile-menu-portal" onclick="toggleMenu();setTimeout(openPortal,300)">🔐 Client Portal</button>
+  </div>
+  <div class="mobile-menu-tagline">Est. 2018 · Chandigarh, India</div>
+</div>
+
+<!-- ═══════ PAGE: HOME ═══════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg">
+      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=90" alt="Hero Photography">
+    </div>
+    <div class="hero-grain"></div>
+    <!-- Floating particles -->
+    <div class="hero-particles" id="heroParticles"></div>
+    <!-- Floating decorative rings -->
+    <div class="float-ring" style="width:300px;height:300px;top:10%;left:5%;animation-duration:12s"></div>
+    <div class="float-ring" style="width:180px;height:180px;bottom:20%;right:8%;animation-duration:9s;animation-delay:2s"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        <span>Est. 2018 · Chandigarh, India · Award-Winning Studio</span>
+      </div>
+      <h1 class="hero-title">
+        WHERE<br>
+        <span class="word-float"><em>LIGHT</em></span><br>
+        BECOMES
+        <span class="word-float2"> ART</span>
+      </h1>
+      <p class="hero-sub">Lumière Photography Studio — Telling stories through the lens</p>
+      <div class="hero-cta">
+        <button class="btn-prim" onclick="showPage('portfolio')">View Our Work</button>
+        <button class="btn-ghost" onclick="showPage('booking')">Book a Session</button>
+        <button class="btn-ghost" onclick="openPortal()" style="border-color:rgba(212,168,83,.35);color:var(--gold)">🔐 Client Portal</button>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <span class="scroll-txt">Scroll to explore</span>
+      <div class="scroll-track"></div>
+    </div>
+    <div class="hero-side-text">Lumière Studio · Fine Photography · Since 2018</div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-band">
+    <div class="stats-inner">
+      <div class="stat-item reveal"><div class="stat-num" data-count="1400">0</div><div class="stat-label">Sessions Completed</div></div>
+      <div class="stat-item reveal" style="transition-delay:.1s"><div class="stat-num" data-count="52">0</div><div class="stat-label">Awards Won</div></div>
+      <div class="stat-item reveal" style="transition-delay:.2s"><div class="stat-num" data-count="8">0</div><div class="stat-label">Years of Excellence</div></div>
+      <div class="stat-item reveal" style="transition-delay:.3s"><div class="stat-num" data-count="99">0</div><div class="stat-label">% Client Satisfaction</div></div>
+    </div>
+  </div>
+
+  <!-- FEATURED WORK -->
+  <section>
+    <div class="container">
+      <div class="sec-tag reveal">Featured Work</div>
+      <div class="sec-title reveal">Capturing <em>Timeless</em><br>Moments</div>
+      <div class="divider-gold reveal"></div>
+      <div class="work-grid">
+        <div class="work-card reveal" onclick="showPage('portfolio')">
+          <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=85" alt="Wedding" loading="lazy">
+          <div class="work-overlay"></div>
+          <div class="work-float-label">Wedding</div>
+          <div class="work-info">
+            <div class="work-cat">Wedding · Fine Art</div>
+            <div class="work-name">Arjun & Priya — The Grand Affair</div>
+          </div>
+        </div>
+        <div class="work-card reveal" style="transition-delay:.1s" onclick="showPage('portfolio')">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=85" alt="Portrait" loading="lazy">
+          <div class="work-overlay"></div>
+          <div class="work-float-label">Portrait</div>
+          <div class="work-info">
+            <div class="work-cat">Portrait · Editorial</div>
+            <div class="work-name">The Quiet Face</div>
+          </div>
+        </div>
+        <div class="work-card reveal" style="transition-delay:.2s" onclick="showPage('portfolio')">
+          <img src="https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?w=700&q=85" alt="Fashion" loading="lazy">
+          <div class="work-overlay"></div>
+          <div class="work-float-label">Fashion</div>
+          <div class="work-info">
+            <div class="work-cat">Fashion · Commercial</div>
+            <div class="work-name">Autumn Couture — Brand Visuals</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:52px">
+        <button class="btn-ghost reveal" onclick="showPage('portfolio')">Explore Full Portfolio →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-band">
+    <div class="marquee-track">
+      <span class="marquee-item">Wedding Photography</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Portrait Sessions</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Fashion Editorial</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Commercial Shoots</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Product Photography</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Event Coverage</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Fine Art Prints</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Wedding Photography</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Portrait Sessions</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Fashion Editorial</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Commercial Shoots</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Product Photography</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Event Coverage</span><span class="marquee-item marquee-sep">✦</span>
+      <span class="marquee-item">Fine Art Prints</span><span class="marquee-item marquee-sep">✦</span>
+    </div>
+  </div>
+
+  <!-- APPROACH -->
+  <section>
+    <div class="container">
+      <div class="approach-wrap">
+        <div class="approach-visual reveal-l">
+          <img class="approach-img-main" src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=700&q=85" alt="Our approach">
+          <div class="approach-border-deco"></div>
+          <div class="approach-float-card">
+            <div class="afc-num">8+</div>
+            <div class="afc-label">Years of Excellence</div>
+          </div>
+          <div class="approach-text-bg">LUMIÈRE</div>
+        </div>
+        <div>
+          <div class="sec-tag reveal-r">Our Philosophy</div>
+          <div class="sec-title reveal-r">Every Frame<br>Tells a <em>Story</em></div>
+          <div class="divider-gold reveal-r"></div>
+          <div class="approach-steps">
+            <div class="step reveal-r" style="transition-delay:.1s">
+              <div class="step-num">01</div>
+              <div class="step-body">
+                <h4>The Consultation</h4>
+                <p>We begin with a deep conversation to understand your vision, the emotion you want to preserve, and the story you want to tell.</p>
+              </div>
+            </div>
+            <div class="step reveal-r" style="transition-delay:.2s">
+              <div class="step-num">02</div>
+              <div class="step-body">
+                <h4>The Session</h4>
+                <p>Every shoot is a collaboration. We craft light, compose moments, and direct with sensitivity so each frame feels completely natural.</p>
+              </div>
+            </div>
+            <div class="step reveal-r" style="transition-delay:.3s">
+              <div class="step-num">03</div>
+              <div class="step-body">
+                <h4>The Delivery</h4>
+                <p>Meticulously retouched in our signature style. Delivered through your private portal with options for prints and fine art albums.</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:40px" class="reveal-r" style="transition-delay:.4s">
+            <button class="btn-prim" onclick="showPage('booking')">Start Your Journey</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARALLAX STRIP 1 -->
+  <div class="pstrip">
+    <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=1920&q=80" class="pstrip-img" id="ps1" alt="">
+    <div class="pstrip-overlay">
+      <div class="pstrip-quote reveal">"Photography is the art of <em>frozen time</em> — the ability to store emotion and feelings within a frame."</div>
+      <button class="btn-prim reveal" onclick="showPage('booking')" style="transition-delay:.2s">Book Your Session</button>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section>
+    <div class="container">
+      <div class="sec-tag reveal">What Clients Say</div>
+      <div class="sec-title reveal">Stories of <em>Joy</em></div>
+      <div class="divider-gold reveal"></div>
+      <div class="testimonials-wrap">
+        <div class="testi-card reveal" style="transition-delay:.05s">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"Lumière captured our wedding in a way we never imagined possible. Every photo tells a story of love we didn't even realize we were creating in those moments."</div>
+          <div class="testi-client">Arjun & Priya · Wedding · Delhi</div>
+        </div>
+        <div class="testi-card reveal" style="transition-delay:.15s">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"The portrait session was transformative. I've never felt so comfortable in front of a lens. The final images are works of art I'll treasure forever."</div>
+          <div class="testi-client">Simran Kaur · Portrait · Chandigarh</div>
+        </div>
+        <div class="testi-card reveal" style="transition-delay:.25s">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"Our brand campaign needed imagery that stopped people mid-scroll. Lumière delivered that and more — the photos elevated our entire visual identity."</div>
+          <div class="testi-client">Vikram Singh · Commercial · Mumbai</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENT PORTAL PROMO SECTION -->
+  <section style="padding:80px 0">
+    <div class="container">
+      <div style="background:linear-gradient(135deg,rgba(16,15,22,.9),rgba(26,24,36,.8));border:1px solid rgba(212,168,83,.15);padding:64px;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;position:relative;overflow:hidden" class="reveal">
+        <div class="float-ring" style="width:400px;height:400px;top:-100px;right:-100px;opacity:.5"></div>
+        <div style="position:relative;z-index:1">
+          <div class="sec-tag">Exclusive Access</div>
+          <div style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.8rem);font-weight:900;color:var(--silver);margin-top:8px;line-height:1.1">Your Private <em style="color:var(--gold);font-weight:400;font-style:italic">Photo Gallery</em><br>is waiting</div>
+          <div style="font-family:'Crimson Pro',serif;font-size:1.05rem;color:var(--fog);margin-top:16px;max-width:480px;line-height:1.7;font-style:italic">After every session, your edited photos are delivered directly to your own secure private gallery. Browse, download, and select your favorites — all in one beautiful place.</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+            <div style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fog);display:flex;align-items:center;gap:6px"><span style="color:var(--gold)">✦</span> Password Protected</div>
+            <div style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fog);display:flex;align-items:center;gap:6px"><span style="color:var(--gold)">✦</span> Full Resolution Downloads</div>
+            <div style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fog);display:flex;align-items:center;gap:6px"><span style="color:var(--gold)">✦</span> 90-Day Access</div>
+          </div>
+        </div>
+        <div style="position:relative;z-index:1;flex-shrink:0">
+          <button class="btn-prim" onclick="openPortal()" style="white-space:nowrap;font-size:.75rem;padding:18px 48px">🔐 Access My Photos</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo" onclick="showPage('home');return false;">LUMIÈRE <div class="logo-dot" style="display:inline-block;margin-left:4px"></div></a>
+          <p>Premium photography studio based in Chandigarh, India. Where light becomes timeless art.</p>
+          <div class="footer-portal-cta" onclick="openPortal()" role="button">
+            <div class="fpc-icon">🔐</div>
+            <div>
+              <div class="fpc-title">Client Proofing Portal</div>
+              <div class="fpc-sub">Access your private photo gallery</div>
+            </div>
+            <div class="fpc-arrow">→</div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <a href="#" onclick="showPage('home');return false;">Home</a>
+          <a href="#" onclick="showPage('portfolio');return false;">Portfolio</a>
+          <a href="#" onclick="showPage('team');return false;">Our Team</a>
+          <a href="#" onclick="showPage('services');return false;">Services</a>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <a href="#" onclick="showPage('booking');return false;">Book a Session</a>
+          <a href="#" onclick="showPage('contact');return false;">Contact Us</a>
+          <a href="#" onclick="openPortal();return false;">Client Portal</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="tel:+919876543210">+91 98765 43210</a>
+          <a href="mailto:hello@lumierestudio.in">hello@lumierestudio.in</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2024 Lumière Studio. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ PAGE: PORTFOLIO ═══════ -->
+<div class="page" id="page-portfolio">
+  <div class="portfolio-hero">
+    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&q=85" alt="Portfolio">
+    <div class="portfolio-hero-content">
+      <div class="sec-tag" style="margin-bottom:12px">Our Work</div>
+      <div style="font-family:'Playfair Display',serif;font-size:clamp(3rem,7vw,6rem);font-weight:900;color:var(--silver);line-height:.9;letter-spacing:-.02em">The <em style="color:var(--gold);font-style:italic;font-weight:400">Portfolio</em></div>
+    </div>
+  </div>
+  <section>
+    <div class="container">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterPort('all',this)">All Work</button>
+        <button class="filter-btn" onclick="filterPort('wedding',this)">Wedding</button>
+        <button class="filter-btn" onclick="filterPort('portrait',this)">Portrait</button>
+        <button class="filter-btn" onclick="filterPort('fashion',this)">Fashion</button>
+        <button class="filter-btn" onclick="filterPort('commercial',this)">Commercial</button>
+        <button class="filter-btn" onclick="filterPort('event',this)">Events</button>
+      </div>
+      <div class="masonry" id="masonry">
+        <div class="mitem reveal" data-cat="wedding"><img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Wedding</div><div class="mitem-title">Eternal Vows</div></div></div>
+        <div class="mitem reveal" data-cat="portrait"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Portrait</div><div class="mitem-title">Golden Hour</div></div></div>
+        <div class="mitem reveal" data-cat="fashion"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Fashion</div><div class="mitem-title">Velvet Season</div></div></div>
+        <div class="mitem reveal" data-cat="commercial"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Commercial</div><div class="mitem-title">Time Piece</div></div></div>
+        <div class="mitem reveal" data-cat="wedding"><img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Wedding</div><div class="mitem-title">Forever Begins</div></div></div>
+        <div class="mitem reveal" data-cat="portrait"><img src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Portrait</div><div class="mitem-title">Soft Focus</div></div></div>
+        <div class="mitem reveal" data-cat="event"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Event</div><div class="mitem-title">The Grand Opening</div></div></div>
+        <div class="mitem reveal" data-cat="fashion"><img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Fashion</div><div class="mitem-title">Studio Editorial</div></div></div>
+        <div class="mitem reveal" data-cat="commercial"><img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Commercial</div><div class="mitem-title">Product Still</div></div></div>
+        <div class="mitem reveal" data-cat="wedding"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Wedding</div><div class="mitem-title">Garden Ceremony</div></div></div>
+        <div class="mitem reveal" data-cat="portrait"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Portrait</div><div class="mitem-title">Candid Light</div></div></div>
+        <div class="mitem reveal" data-cat="event"><img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&q=80" alt="" loading="lazy"><div class="mitem-overlay"></div><div class="mitem-info"><div class="mitem-cat">Event</div><div class="mitem-title">Gala Evening</div></div></div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="#" class="logo" onclick="showPage('home');return false;">LUMIÈRE</a><p>Where light becomes art.</p></div>
+        <div class="footer-col"><h4>Navigate</h4><a href="#" onclick="showPage('home');return false;">Home</a><a href="#" onclick="showPage('portfolio');return false;">Portfolio</a><a href="#" onclick="showPage('services');return false;">Services</a></div>
+        <div class="footer-col"><h4>Links</h4><a href="#" onclick="showPage('booking');return false;">Book Session</a><a href="#" onclick="openPortal();return false;">Client Portal</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="tel:+919876543210">+91 98765 43210</a><a href="mailto:hello@lumierestudio.in">hello@lumierestudio.in</a></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-copy">© 2024 Lumière Studio.</div></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ PAGE: TEAM ═══════ -->
+<div class="page" id="page-team">
+  <section style="padding-top:160px">
+    <div class="container">
+      <div class="sec-tag reveal">The Artists</div>
+      <div class="sec-title reveal">Meet the <em>Visionaries</em></div>
+      <div class="divider-gold reveal"></div>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=600&q=85" alt="Arav Sharma" loading="lazy">
+          <div class="team-overlay"></div>
+          <div class="team-info">
+            <div class="team-role">Founder · Lead Photographer</div>
+            <div class="team-name">Arav Sharma</div>
+            <div class="team-bio">With 15 years of experience, Arav's eye for emotion and light has made him one of India's most sought-after wedding and portrait photographers.</div>
+            <div class="team-socials"><a href="#">Instagram</a><a href="#">Portfolio</a></div>
+          </div>
+        </div>
+        <div class="team-card reveal" style="transition-delay:.1s">
+          <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=600&q=85" alt="Meera Kapoor" loading="lazy">
+          <div class="team-overlay"></div>
+          <div class="team-info">
+            <div class="team-role">Fashion · Commercial Photographer</div>
+            <div class="team-name">Meera Kapoor</div>
+            <div class="team-bio">Meera brings a fashion-editorial sensibility to every shoot, having collaborated with leading brands across Asia and Europe.</div>
+            <div class="team-socials"><a href="#">Instagram</a><a href="#">Portfolio</a></div>
+          </div>
+        </div>
+        <div class="team-card reveal" style="transition-delay:.2s">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=85" alt="Rohan Mehta" loading="lazy">
+          <div class="team-overlay"></div>
+          <div class="team-info">
+            <div class="team-role">Portrait · Fine Art Photographer</div>
+            <div class="team-name">Rohan Mehta</div>
+            <div class="team-bio">Rohan's minimalist approach to portraiture has earned him international recognition and placement in several gallery exhibitions.</div>
+            <div class="team-socials"><a href="#">Instagram</a><a href="#">Portfolio</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="pstrip" style="margin-top:80px">
+    <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=1920&q=80" class="pstrip-img" id="ps2" alt="">
+    <div class="pstrip-overlay">
+      <div class="pstrip-quote reveal">"We don't just take photos — we craft <em>heirlooms</em>."</div>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="#" class="logo" onclick="showPage('home');return false;">LUMIÈRE</a><p>Where light becomes art.</p></div>
+        <div class="footer-col"><h4>Navigate</h4><a href="#" onclick="showPage('home');return false;">Home</a><a href="#" onclick="showPage('portfolio');return false;">Portfolio</a><a href="#" onclick="showPage('services');return false;">Services</a></div>
+        <div class="footer-col"><h4>Links</h4><a href="#" onclick="showPage('booking');return false;">Book Session</a><a href="#" onclick="openPortal();return false;">Client Portal</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="tel:+919876543210">+91 98765 43210</a></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-copy">© 2024 Lumière Studio.</div></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ PAGE: SERVICES ═══════ -->
+<div class="page" id="page-services">
+  <div class="services-hero">
+    <img src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1920&q=85" alt="Services">
+    <div class="services-hero-content">
+      <div class="sec-tag" style="margin-bottom:12px">What We Offer</div>
+      <div style="font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;color:var(--silver);line-height:.9">Our <em style="color:var(--gold);font-style:italic;font-weight:400">Services</em></div>
+    </div>
+  </div>
+  <section>
+    <div class="container">
+      <div class="services-grid">
+        <div class="srv-card reveal">
+          <div class="srv-icon">💍</div>
+          <div class="srv-name">Wedding Photography</div>
+          <div class="srv-desc">Full-day coverage of your most cherished day. From intimate ceremonies to grand receptions, we capture every emotion.</div>
+          <div class="srv-price">₹75,000</div>
+          <div class="srv-price-note">Starting price · Full-day coverage</div>
+          <ul class="srv-includes">
+            <li>Up to 10 hours coverage</li>
+            <li>2 professional photographers</li>
+            <li>500+ edited high-res images</li>
+            <li>Private online gallery</li>
+            <li>Fine art album (optional)</li>
+          </ul>
+        </div>
+        <div class="srv-card reveal" style="transition-delay:.1s">
+          <div class="srv-icon">🖼</div>
+          <div class="srv-name">Portrait Session</div>
+          <div class="srv-desc">Studio and on-location portrait sessions designed to capture your authentic self. Editorial, personal, or professional.</div>
+          <div class="srv-price">₹15,000</div>
+          <div class="srv-price-note">Starting price · 2-hour session</div>
+          <ul class="srv-includes">
+            <li>2-hour guided session</li>
+            <li>30+ edited portraits</li>
+            <li>Wardrobe consultation</li>
+            <li>Private gallery access</li>
+            <li>Print-ready files included</li>
+          </ul>
+        </div>
+        <div class="srv-card reveal" style="transition-delay:.2s">
+          <div class="srv-icon">📸</div>
+          <div class="srv-name">Commercial & Brand</div>
+          <div class="srv-desc">Brand photography, product shoots, and campaign visuals that stop the scroll and elevate your identity.</div>
+          <div class="srv-price">₹25,000</div>
+          <div class="srv-price-note">Starting price · Half-day</div>
+          <ul class="srv-includes">
+            <li>Concept development included</li>
+            <li>Styled product photography</li>
+            <li>50+ final edited images</li>
+            <li>Commercial usage license</li>
+            <li>Brand color-graded delivery</li>
+          </ul>
+        </div>
+        <div class="srv-card reveal" style="transition-delay:.05s">
+          <div class="srv-icon">👗</div>
+          <div class="srv-name">Fashion Editorial</div>
+          <div class="srv-desc">High-concept fashion photography for designers, models, and publications with a cinematic, editorial edge.</div>
+          <div class="srv-price">₹35,000</div>
+          <div class="srv-price-note">Starting price · Full day</div>
+          <ul class="srv-includes"><li>Art direction included</li><li>Location scouting</li><li>100+ edited frames</li><li>Social media crops included</li></ul>
+        </div>
+        <div class="srv-card reveal" style="transition-delay:.15s">
+          <div class="srv-icon">🎉</div>
+          <div class="srv-name">Event Coverage</div>
+          <div class="srv-desc">Corporate events, product launches, galas, and private celebrations — documented with a photojournalistic eye.</div>
+          <div class="srv-price">₹20,000</div>
+          <div class="srv-price-note">Starting price · 4 hours</div>
+          <ul class="srv-includes"><li>Candid & posed coverage</li><li>Same-week delivery</li><li>250+ edited images</li><li>Online gallery sharing</li></ul>
+        </div>
+        <div class="srv-card reveal" style="transition-delay:.25s">
+          <div class="srv-icon">🖨</div>
+          <div class="srv-name">Fine Art Prints</div>
+          <div class="srv-desc">Museum-quality archival prints, handcrafted albums, and luxury wall art created from your images. Heirlooms in every form.</div>
+          <div class="srv-price">₹8,000</div>
+          <div class="srv-price-note">Starting price · Per piece</div>
+          <ul class="srv-includes"><li>Archival giclée printing</li><li>Hand-bound leather albums</li><li>Acrylic & canvas options</li><li>Custom framing available</li></ul>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:64px">
+        <button class="btn-prim reveal" onclick="showPage('booking')">Book a Consultation →</button>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="#" class="logo" onclick="showPage('home');return false;">LUMIÈRE</a><p>Where light becomes art.</p></div>
+        <div class="footer-col"><h4>Navigate</h4><a href="#" onclick="showPage('home');return false;">Home</a><a href="#" onclick="showPage('portfolio');return false;">Portfolio</a></div>
+        <div class="footer-col"><h4>Links</h4><a href="#" onclick="showPage('booking');return false;">Book Session</a><a href="#" onclick="openPortal();return false;">Client Portal</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="tel:+919876543210">+91 98765 43210</a></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-copy">© 2024 Lumière Studio.</div></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ PAGE: BOOKING ═══════ -->
+<div class="page" id="page-booking">
+  <div class="booking-wrap">
+    <div class="booking-info">
+      <div class="sec-tag">Get Started</div>
+      <div style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:900;color:var(--silver);line-height:1;margin-top:12px">Book a <em style="color:var(--gold);font-style:italic;font-weight:400">Session</em></div>
+      <div style="font-family:'Crimson Pro',serif;font-size:1rem;color:var(--fog);line-height:1.75;margin-top:20px;font-style:italic">Every story begins with a single frame. Let's create yours together.</div>
+      <div class="booking-info-points">
+        <div class="bip"><div class="bip-icon">📞</div><div><div class="bip-title">Free Consultation</div><div class="bip-text">We discuss your vision, timeline, and creative goals before any commitment.</div></div></div>
+        <div class="bip"><div class="bip-icon">📅</div><div><div class="bip-title">Flexible Scheduling</div><div class="bip-text">Weekends, evenings, and destination sessions available across India.</div></div></div>
+        <div class="bip"><div class="bip-icon">🔐</div><div><div class="bip-title">Private Gallery Delivery</div><div class="bip-text">Your photos are delivered to a secure private portal — exclusively for you.</div></div></div>
+        <div class="bip"><div class="bip-icon">🖼</div><div><div class="bip-title">Print-Ready Files</div><div class="bip-text">Every image retouched in our signature style, delivered in high resolution.</div></div></div>
+      </div>
+    </div>
+    <div class="booking-form-area">
+      <div class="form-title">Your <em>Vision</em><br>Starts Here</div>
+      <div class="booking-form">
+        <div class="form-row">
+          <div class="fg"><label>First Name</label><input type="text" placeholder="Arjun"></div>
+          <div class="fg"><label>Last Name</label><input type="text" placeholder="Sharma"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Email Address</label><input type="email" placeholder="arjun@email.com"></div>
+          <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
+        </div>
+        <div class="fg"><label>Session Type</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Wedding Photography</option>
+            <option>Portrait Session</option>
+            <option>Fashion Editorial</option>
+            <option>Commercial & Brand</option>
+            <option>Event Coverage</option>
+            <option>Fine Art Prints</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Preferred Date</label><input type="date"></div>
+          <div class="fg"><label>Location / City</label><input type="text" placeholder="Chandigarh, India"></div>
+        </div>
+        <div class="fg"><label>Tell Us About Your Vision</label><textarea placeholder="Describe your ideal session, mood, or any special requirements..."></textarea></div>
+        <button class="submit-btn" onclick="submitBooking()">Send Enquiry — Let's Begin →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PAGE: CONTACT ═══════ -->
+<div class="page" id="page-contact">
+  <div class="contact-hero">
+    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&q=80" alt="Contact">
+    <div style="position:relative;z-index:2;padding:0 64px">
+      <div class="sec-tag" style="margin-bottom:12px">Reach Out</div>
+      <div style="font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:900;color:var(--silver);line-height:.9">Let's <em style="color:var(--gold);font-style:italic;font-weight:400">Connect</em></div>
+    </div>
+  </div>
+  <section>
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <div class="contact-info">
+            <h3>We'd love to<br>hear from <em>you</em></h3>
+            <div style="font-family:'Crimson Pro',serif;font-size:1rem;color:var(--fog);line-height:1.75;font-style:italic">Whether you're planning a wedding, a brand campaign, or simply want to talk about photography — our door is always open.</div>
+          </div>
+          <div class="contact-points">
+            <div class="cp"><div class="cp-label">Phone</div><div class="cp-val"><a href="tel:+919876543210">+91 98765 43210</a></div></div>
+            <div class="cp"><div class="cp-label">Email</div><div class="cp-val"><a href="mailto:hello@lumierestudio.in">hello@lumierestudio.in</a></div></div>
+            <div class="cp"><div class="cp-label">Studio</div><div class="cp-val">Sector 17, Chandigarh, Punjab 160017</div></div>
+            <div class="cp"><div class="cp-label">Hours</div><div class="cp-val">Mon–Sat, 10am – 7pm</div></div>
+          </div>
+          <div class="social-row">
+            <a class="soc-btn" href="#">IG</a>
+            <a class="soc-btn" href="#">FB</a>
+            <a class="soc-btn" href="#">YT</a>
+            <a class="soc-btn" href="#">LI</a>
+          </div>
+          <!-- Portal CTA in contact -->
+          <div style="margin-top:36px;padding:24px;background:rgba(16,15,22,.6);border:1px solid rgba(212,168,83,.15);cursor:pointer;transition:border-color .3s" onclick="openPortal()" onmouseenter="this.style.borderColor='rgba(212,168,83,.4)'" onmouseleave="this.style.borderColor='rgba(212,168,83,.15)'">
+            <div style="font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:6px">🔐 Existing Client?</div>
+            <div style="font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--fog);font-style:italic">Access your private photo gallery through our secure Client Proofing Portal →</div>
+          </div>
+        </div>
+        <div class="contact-form-area">
+          <div class="fg"><label class="portal-label" style="color:var(--fog)">Your Name</label><input type="text" class="portal-input" placeholder="Full Name"></div>
+          <div class="fg"><label class="portal-label" style="color:var(--fog)">Email</label><input type="email" class="portal-input" placeholder="email@example.com"></div>
+          <div class="fg"><label class="portal-label" style="color:var(--fog)">Subject</label>
+            <select class="portal-input" style="background:rgba(26,24,36,.6);border:1px solid rgba(212,168,83,.15);color:var(--cream);font-family:'Syne',sans-serif;font-size:.88rem;outline:none;cursor:none;padding:14px 18px">
+              <option style="background:var(--deep)">General Enquiry</option>
+              <option style="background:var(--deep)">Booking Request</option>
+              <option style="background:var(--deep)">Portfolio Inquiry</option>
+              <option style="background:var(--deep)">Print Order</option>
+              <option style="background:var(--deep)">Other</option>
+            </select>
+          </div>
+          <div class="fg"><label class="portal-label" style="color:var(--fog)">Message</label><textarea class="portal-input" style="min-height:130px;resize:vertical" placeholder="Tell us how we can help..."></textarea></div>
+          <button class="submit-btn" onclick="submitContact()">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a href="#" class="logo" onclick="showPage('home');return false;">LUMIÈRE</a><p>Where light becomes art.</p></div>
+        <div class="footer-col"><h4>Navigate</h4><a href="#" onclick="showPage('home');return false;">Home</a><a href="#" onclick="showPage('portfolio');return false;">Portfolio</a></div>
+        <div class="footer-col"><h4>Links</h4><a href="#" onclick="showPage('booking');return false;">Book Session</a><a href="#" onclick="openPortal();return false;">Client Portal</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="tel:+919876543210">+91 98765 43210</a></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-copy">© 2024 Lumière Studio.</div></div>
+    </div>
+  </footer>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-title" id="toastTitle">Message Sent!</div>
+  <div class="toast-msg" id="toastMsg">We'll get back to you within 24 hours.</div>
+</div>
+
+<script>
+/* ─── CURSOR ─── */
+const cur = document.getElementById('cur');
+const trail = document.getElementById('cur-trail');
+let mx=0,my=0,trx=0,try_=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function animTrail(){trx+=(mx-trx)*.1;try_+=(my-try_)*.1;trail.style.left=trx+'px';trail.style.top=try_+'px';requestAnimationFrame(animTrail)})();
+document.querySelectorAll('a,button,[role="button"],.work-card,.mitem,.team-card,.srv-card,.testi-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+
+/* ─── HERO PARTICLES ─── */
+function spawnParticles(){
+  const container=document.getElementById('heroParticles');
+  if(!container)return;
+  for(let i=0;i<25;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.cssText=`left:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;opacity:${Math.random()*.4+.1}`;
+    container.appendChild(p);
+  }
+}
+spawnParticles();
+
+/* ─── HERO BG LOAD ─── */
+window.addEventListener('load',()=>{
+  const bg=document.getElementById('heroBg');
+  if(bg)bg.classList.add('loaded');
+});
+
+/* ─── PAGE SYSTEM ─── */
+let curPage='home';
+function showPage(name){
+  if(name===curPage)return;
+  const curtain=document.getElementById('curtain');
+  curtain.classList.add('in');
+  setTimeout(()=>{
+    document.getElementById('page-'+curPage).classList.remove('active');
+    document.getElementById('page-'+name).classList.add('active');
+    curPage=name;
+    window.scrollTo(0,0);
+    curtain.classList.remove('in');
+    curtain.classList.add('out');
+    setTimeout(()=>curtain.classList.remove('out'),600);
+    document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===name));
+    setTimeout(initReveal,120);
+  },400);
+}
+
+/* ─── NAVBAR ─── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',scrollY>60);
+  // Parallax strips
+  document.querySelectorAll('.pstrip-img').forEach(img=>{
+    const rect=img.parentElement.getBoundingClientRect();
+    if(rect.top<innerHeight&&rect.bottom>0){
+      const pct=(innerHeight-rect.top)/(innerHeight+rect.height);
+      img.style.transform=`translateY(${(pct-.5)*60}px)`;
+    }
+  });
+  // Hero parallax
+  const heroBg=document.querySelector('#page-home .hero-bg img');
+  if(heroBg&&curPage==='home'){heroBg.style.transform=`scale(1) translateY(${scrollY*.15}px)`}
+});
+
+/* ─── SCROLL REVEAL ─── */
+function initReveal(){
+  const sel='#page-'+curPage+' .reveal, #page-'+curPage+' .reveal-l, #page-'+curPage+' .reveal-r';
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll(sel).forEach(el=>{if(!el.classList.contains('vis'))obs.observe(el)});
+}
+initReveal();
+
+/* ─── COUNTER ANIMATION ─── */
+function animCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=+el.dataset.count;let cur2=0;
+    const step=Math.ceil(target/60);
+    const tm=setInterval(()=>{cur2=Math.min(cur2+step,target);el.textContent=cur2+(el.closest('.stat-item').querySelector('.stat-label').textContent.includes('%')?'%':'+');if(cur2>=target)clearInterval(tm)},22);
+  });
+}
+const statsObs=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){animCounters();statsObs.disconnect()}},{threshold:.3});
+const statsEl=document.querySelector('.stats-inner');
+if(statsEl)statsObs.observe(statsEl);
+
+/* ─── PORTFOLIO FILTER ─── */
+function filterPort(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mitem').forEach(item=>{
+    const show=cat==='all'||item.dataset.cat===cat;
+    item.style.transition='opacity .4s,transform .4s';
+    if(show){item.style.display='block';setTimeout(()=>{item.style.opacity='1';item.style.transform='scale(1)'},10)}
+    else{item.style.opacity='0';item.style.transform='scale(.95)';setTimeout(()=>item.style.display='none',380)}
+  });
+}
+
+/* ─── MOBILE MENU ─── */
+let menuOpen=false;
+function toggleMenu(){
+  const menu=document.getElementById('mobileMenu');
+  const ham=document.getElementById('hamburger');
+  menuOpen=!menuOpen;
+  if(menuOpen){menu.style.display='flex';requestAnimationFrame(()=>menu.classList.add('open'));ham.classList.add('open');document.body.style.overflow='hidden'}
+  else{menu.classList.remove('open');ham.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{if(!menuOpen)menu.style.display='none'},450)}
+}
+function mobileNav(page){toggleMenu();setTimeout(()=>showPage(page),250)}
+
+/* ─── CLIENT PORTAL ─── */
+// Demo credentials (in real use, validate server-side)
+const demoClients={
+  'lumiere2024':{name:'Arjun & Priya — Wedding',photos:[
+    'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=300&q=80',
+    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=300&q=80',
+    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=300&q=80',
+    'https://images.unsplash.com/photo-1537633468-f3bf5d80e42e?w=300&q=80',
+    'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=300&q=80',
+    'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=300&q=80',
+  ]},
+  'portrait2024':{name:'Simran Kaur — Portrait Session',photos:[
+    'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80',
+    'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=300&q=80',
+    'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=300&q=80',
+    'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=300&q=80',
+  ]},
+};
+
+function openPortal(){
+  const overlay=document.getElementById('portal-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  // Reset to login view
+  document.getElementById('portal-login').style.display='block';
+  document.getElementById('portal-gallery-view').style.display='none';
+  document.getElementById('portal-err').style.display='none';
+  document.getElementById('portal-pass').value='';
+  document.getElementById('portal-name').value='';
+}
+
+function closePortal(){
+  const overlay=document.getElementById('portal-overlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function tryLogin(){
+  const pass=document.getElementById('portal-pass').value.trim().toLowerCase();
+  const errEl=document.getElementById('portal-err');
+  if(demoClients[pass]){
+    errEl.style.display='none';
+    const client=demoClients[pass];
+    document.getElementById('gallery-client-name').textContent=client.name;
+    // Build gallery
+    const grid=document.getElementById('gallery-grid');
+    grid.innerHTML='';
+    client.photos.forEach((src,i)=>{
+      const div=document.createElement('div');
+      div.className='gallery-thumb';
+      div.innerHTML=`<img src="${src}" alt="Photo ${i+1}" loading="lazy"><div class="gallery-thumb-overlay">View ↗</div>`;
+      div.onclick=()=>showToast('Photo '+(i+1),'Full resolution version available for download from your gallery.');
+      grid.appendChild(div);
+    });
+    document.getElementById('portal-login').style.display='none';
+    document.getElementById('portal-gallery-view').style.display='flex';
+  } else {
+    errEl.style.display='block';
+    document.getElementById('portal-pass').style.borderColor='rgba(224,112,112,.5)';
+    setTimeout(()=>document.getElementById('portal-pass').style.borderColor='rgba(212,168,83,.15)',2000);
+  }
+}
+
+function logoutPortal(){
+  document.getElementById('portal-login').style.display='block';
+  document.getElementById('portal-gallery-view').style.display='none';
+}
+
+/* ─── FORMS ─── */
+function submitBooking(){showToast('Enquiry Sent! ✦','Thank you! We\'ll confirm availability within 24 hours.')}
+function submitContact(){showToast('Message Received!','We\'ll respond to your message shortly.')}
+function showToast(title,msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastTitle').textContent=title;
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4500);
+}
+
+// Fix typo in JS
+document.querySelectorAll('.gallery-thumb').forEach((el,i)=>el.addEventListener('click',()=>showToast('Photo '+(i+1),'Full resolution available for download.')));
+
+// Keyboard close portal
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePortal()});
+</script>
+
+<audio id="bgMusic" loop>
+  <source src="sound.mp3" type="audio/mpeg">
+</audio>
+<script>
+  window.addEventListener('load', () => {
+    if (sessionStorage.getItem('musicPlaying') === 'true') {
+      const music = document.getElementById('bgMusic');
+      if (music) {
+        music.play().catch(e => console.log("Playback failed. Interaction may be required on this page."));
+      }
+    }
+  });
+</script>
+</body>
+</html>

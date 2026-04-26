@@ -1,0 +1,163 @@
+/* background-audio.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600&display=swap');
+
+#welcome-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(6, 6, 8, 0.85);
+    backdrop-filter: blur(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#welcome-popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.welcome-popup-card {
+    background: rgba(26, 24, 36, 0.6);
+    border: 1px solid rgba(212, 168, 83, 0.3);
+    padding: 3rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    backdrop-filter: blur(40px);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+#welcome-popup-overlay.show .welcome-popup-card {
+    transform: translateY(0) scale(1);
+}
+
+.welcome-popup-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4a853, transparent);
+}
+
+.welcome-popup-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #d4a853;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+    display: block;
+}
+
+.welcome-popup-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f8f3ea;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-popup-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: #d4a853;
+}
+
+.welcome-popup-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    color: #b8b0a2;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+}
+
+.welcome-popup-btn {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: rgba(212, 168, 83, 0.15);
+    border: 1px solid rgba(212, 168, 83, 0.5);
+    color: #d4a853;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.welcome-popup-btn:hover {
+    background: #d4a853;
+    color: #060608;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(212, 168, 83, 0.3);
+}
+
+/* Audio Control Button (Optional but good for UX) */
+#audio-control {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 9999;
+    width: 44px;
+    height: 44px;
+    background: rgba(212, 168, 83, 0.1);
+    border: 1px solid rgba(212, 168, 83, 0.3);
+    backdrop-filter: blur(10px);
+    color: #d4a853;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#audio-control.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#audio-control:hover {
+    background: #d4a853;
+    color: #060608;
+}
+
+.music-waves {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+}
+
+.wave {
+    width: 2px;
+    background: currentColor;
+    animation: wave-anim 1s ease-in-out infinite alternate;
+}
+
+.wave:nth-child(2) { animation-delay: 0.2s; height: 100%; }
+.wave:nth-child(3) { animation-delay: 0.4s; height: 60%; }
+.wave:nth-child(1) { height: 80%; }
+
+@keyframes wave-anim {
+    0% { height: 20%; }
+    100% { height: 100%; }
+}
+
+.paused .wave {
+    animation-play-state: paused;
+    height: 20% !important;
+}
