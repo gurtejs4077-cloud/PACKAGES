@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savor — The Art of Gastronomy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        /* ─── RESET & BASE ─────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0c0b0a;
+            --clay: #1a1816;
+            --gold: #d4af37;
+            --gold-muted: #b8860b;
+            --ivory: #f9f5f0;
+            --stone: #a8a29e;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--ivory);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Particles/Orbs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 10%;
+            left: 5%;
+            width: 30vw;
+            height: 30vw;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ─── CUSTOM CURSOR ─────────────────────────────── */
+        #cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: exclusion;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            opacity: 0.5;
+        }
+
+        /* ─── NAVIGATION ─────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 40px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: 0.5s;
+        }
+
+        nav.scrolled {
+            padding: 20px 80px;
+            background: rgba(12, 11, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--ivory);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--stone);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--gold); }
+
+        /* ─── HERO ─────────────────────────────── */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            background: url('restaurant_hero.png') center/cover no-repeat;
+            z-index: -1;
+            filter: brightness(0.4);
+            transform: scale(1.1);
+            animation: kenBurns 20s infinite alternate;
+        }
+
+        @keyframes kenBurns {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--stone);
+            margin-bottom: 50px;
+        }
+
+        .btn-gold {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.75rem;
+            transition: 0.4s;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        /* ─── MENU SECTION ─────────────────────────────── */
+        section { padding: 150px 0; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+        .sect-title {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .sect-title h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+        }
+
+        .menu-cat h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            color: var(--gold);
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            align-items: baseline;
+        }
+
+        .m-name { font-weight: 400; font-size: 1.1rem; }
+        .m-dots { flex-grow: 1; border-bottom: 1px dashed var(--glass-border); margin: 0 15px; }
+        .m-price { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold); }
+        .m-desc { font-size: 0.8rem; color: var(--stone); margin-top: 5px; }
+
+        /* ─── RESERVATION ─────────────────────────────── */
+        .res-box {
+            background: var(--clay);
+            padding: 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .res-form input, .res-form select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+            color: var(--ivory);
+            margin-bottom: 30px;
+            font-family: inherit;
+        }
+
+        .res-form input:focus { outline: none; border-color: var(--gold); }
+
+        /* ─── PACKAGES ─────────────────────────────── */
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .p-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 60px 40px;
+            text-align: center;
+            transition: 0.5s;
+        }
+
+        .p-card:hover { transform: translateY(-15px); border-color: var(--gold); }
+
+        .p-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; margin-bottom: 20px; }
+        .p-card .price { font-size: 2.5rem; color: var(--gold); margin-bottom: 30px; display: block; }
+        .p-card ul { list-style: none; margin-bottom: 40px; color: var(--stone); font-size: 0.85rem; line-height: 2.2; }
+
+        /* ─── FOOTER ─────────────────────────────── */
+        footer {
+            padding: 100px 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .f-logo { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--ivory); text-decoration: none; margin-bottom: 40px; display: block; }
+
+        @media (max-width: 900px) {
+            .menu-grid, .res-box, .package-grid { grid-template-columns: 1fr; }
+            nav { padding: 30px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <nav id="navbar">
+        <a href="#" class="logo">SAVOR<span>.</span></a>
+        <div class="nav-links">
+            <a href="restaurant_menu.html">Menu</a>
+            <a href="restaurant_about.html">Philosophy</a>
+            <a href="#reservation">Book Table</a>
+            <a href="restaurant_contact.html">Contact</a>
+        </div>
+        <a href="#reservation" class="btn-gold" style="padding: 10px 25px; font-size: 0.6rem;">Reservations</a>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-img"></div>
+        <div class="hero-content">
+            <h5 class="hero-subtitle">Michelin Standard Experience</h5>
+            <h1 class="hero-title">Taste the <em>Art</em></h1>
+            <a href="#menu" class="btn-gold">Discover the Menu</a>
+        </div>
+    </div>
+
+    <section id="menu">
+        <div class="container">
+            <div class="sect-title">
+                <span style="color: var(--gold); letter-spacing: 5px; font-size: 0.7rem; text-transform: uppercase;">The Selection</span>
+                <h2>Our Menu</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-cat">
+                    <h3>Appetizers</h3>
+                    <div class="menu-item">
+                        <div>
+                            <p class="m-name">Truffle Arancini</p>
+                            <p class="m-desc">Wild mushroom, carnaroli rice, truffle aioli</p>
+                        </div>
+                        <div class="m-dots"></div>
+                        <p class="m-price">$18</p>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <p class="m-name">Beef Carpaccio</p>
+                            <p class="m-desc">Aged balsamic, capers, parmesan shards</p>
+                        </div>
+                        <div class="m-dots"></div>
+                        <p class="m-price">$24</p>
+                    </div>
+                </div>
+                <div class="menu-cat">
+                    <h3>Main Course</h3>
+                    <div class="menu-item">
+                        <div>
+                            <p class="m-name">Pan Seared Scallops</p>
+                            <p class="m-desc">Pea purée, chorizo crumble, lemon oil</p>
+                        </div>
+                        <div class="m-dots"></div>
+                        <p class="m-price">$42</p>
+                    </div>
+                    <div class="menu-item">
+                        <div>
+                            <p class="m-name">Wagyu Ribeye</p>
+                            <p class="m-desc">Bone marrow butter, seasonal roots</p>
+                        </div>
+                        <div class="m-dots"></div>
+                        <p class="m-price">$65</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reservation" style="background: #000;">
+        <div class="container">
+            <div class="res-box">
+                <div class="res-info">
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; margin-bottom: 30px;">Reserve a <em>Table</em></h2>
+                    <p style="color: var(--stone); line-height: 1.8; margin-bottom: 40px;">Join us for an unforgettable evening. We recommend booking at least 48 hours in advance for weekend dining.</p>
+                    <p style="font-size: 0.8rem; letter-spacing: 2px;">+91 95010 71554</p>
+                    <p style="font-size: 0.8rem; letter-spacing: 2px; color: var(--gold); margin-top: 10px;">bookings@savor.com</p>
+                </div>
+                <div class="res-form">
+                    <input type="text" placeholder="Full Name">
+                    <input type="email" placeholder="Email Address">
+                    <div style="display: flex; gap: 20px;">
+                        <select>
+                            <option>Guests (1-2)</option>
+                            <option>Guests (3-4)</option>
+                            <option>Guests (5+)</option>
+                        </select>
+                        <input type="date">
+                    </div>
+                    <button class="btn-gold" style="width: 100%; border-style: solid;">Confirm Request</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="container">
+            <div class="sect-title">
+                 <span style="color: var(--gold); letter-spacing: 5px; font-size: 0.7rem; text-transform: uppercase;">Web Services</span>
+                <h2>Digital Packages</h2>
+            </div>
+            <div class="package-grid">
+                <div class="p-card">
+                    <h4>Basic</h4>
+                    <span class="price">₹5,000</span>
+                    <ul>
+                        <li>Interactive Photo Menu</li>
+                        <li>WhatsApp Order Button</li>
+                        <li>Google Maps Integration</li>
+                        <li>Mobile Optimised Design</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-gold" style="font-size: 0.6rem;">Enquire Now</a>
+                </div>
+                <div class="p-card" style="border-color: var(--gold); background: rgba(212, 175, 55, 0.05);">
+                    <h4 style="color: var(--gold);">Pro</h4>
+                    <span class="price">₹15,000</span>
+                    <ul>
+                        <li>Everything in Basic</li>
+                        <li>WhatsApp Ordering System</li>
+                        <li>Table Reservation Booking</li>
+                        <li>Staff Admin Panel</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-gold" style="background: var(--gold); color: #000; font-size: 0.6rem;">Popular Choice</a>
+                </div>
+                <div class="p-card">
+                    <h4>Premium</h4>
+                    <span class="price">₹35,000</span>
+                    <ul>
+                        <li>Everything in Pro</li>
+                        <li>Full E-commerce Checkout</li>
+                        <li>Loyalty Program System</li>
+                        <li>Order Analytics Dashboard</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-gold" style="font-size: 0.6rem;">Go Elite</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="f-logo">SAVOR<span>.</span></a>
+            <p style="color: var(--stone); font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;">Ludhiana • Chandigarh • Delhi</p>
+            <p style="color: var(--stone); font-size: 0.6rem; opacity: 0.5;">&copy; 2026 Savor Fine Dining. A Sample Design by GURTEJ SINGH.</p>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 100) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy — Savor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --black: #0c0b0a;
+            --clay: #1a1816;
+            --gold: #d4af37;
+            --ivory: #f9f5f0;
+            --stone: #a8a29e;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+        body {
+            background-color: var(--black);
+            color: var(--ivory);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+        #cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: exclusion; }
+        #cursor-ring { position: fixed; width: 40px; height: 40px; border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: transform 0.1s ease-out; opacity: 0.5; }
+        
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 30px 80px; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(12, 11, 10, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; letter-spacing: 2px; color: var(--ivory); text-decoration: none; }
+        .logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: var(--stone); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; }
+        .nav-links a:hover { color: var(--gold); }
+
+        .sub-header { padding: 180px 0 60px; text-align: center; }
+        .sub-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: var(--ivory); }
+        .sub-header h1 em { font-style: italic; color: var(--gold); }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 40px; }
+        
+        .content-section { margin-bottom: 100px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+        .content-section.reverse { grid-template-columns: 1fr 1.2fr; }
+        .text-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; margin-bottom: 30px; color: var(--gold); }
+        .text-box p { line-height: 2; color: var(--stone); margin-bottom: 20px; font-size: 1rem; }
+        
+        .image-wrap { aspect-ratio: 4/5; overflow: hidden; border: 1px solid var(--glass-border); padding: 15px; }
+        .image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 1s; }
+        .image-wrap:hover img { opacity: 1; transform: scale(1.05); }
+
+        footer { padding: 60px 0; border-top: 1px solid var(--glass-border); text-align: center; color: var(--stone); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <nav>
+        <a href="RESTAURANTBASIC.html" class="logo">SAVOR<span>.</span></a>
+        <div class="nav-links">
+            <a href="restaurant_menu.html">Menu</a>
+            <a href="restaurant_about.html">Philosophy</a>
+            <a href="RESTAURANTBASIC.html#reservation">Book Table</a>
+            <a href="restaurant_contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="sub-header">
+        <div class="container">
+            <h1>The <em>Philosophy</em></h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="content-section">
+            <div class="text-box">
+                <h2>Nature is the Artist</h2>
+                <p>At Savor, we believe that the ingredients should speak for themselves. Our kitchen is merely a stage where nature's finest seasonal offerings are presented with respect and precision.</p>
+                <p>We work directly with local farmers and foragers to ensure that every leaf, root, and protein on your plate is at its absolute peak of flavor and nutritional value.</p>
+            </div>
+            <div class="image-wrap">
+                <img src="https://images.unsplash.com/photo-1550966841-3ee5ad60d0d9?w=600&q=80" alt="Kitchen">
+            </div>
+        </section>
+
+        <section class="content-section reverse">
+            <div class="image-wrap">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Dining">
+            </div>
+            <div class="text-box">
+                <h2>The Guest Journey</h2>
+                <p>Dining is an immersive experience. From the soft ambient lighting to the curated soundtrack, every detail is engineered to transport you away from the mundane.</p>
+                <p>Our service is attentive yet unobtrusive, ensuring that your focus remains on the conversation and the culinary artistry unfolding before you.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Savor Fine Dining. Designed by Gurtej Singh.
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

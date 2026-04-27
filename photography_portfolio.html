@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Lumière Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --black: #080808; --gold: #c9a96e; --ivory: #f5f0e8; --mist: #a89880; }
+        body { background-color: var(--black); color: var(--ivory); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
+        #cursor { position: fixed; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+        #cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: transform .15s ease-out; opacity: .5; }
+        
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 24px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(8, 8, 8, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: .2em; color: var(--gold); text-decoration: none; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: var(--mist); text-decoration: none; font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; }
+        .nav-links a:hover { color: var(--gold); }
+
+        .sub-header { padding: 180px 0 100px; text-align: center; }
+        .sub-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+        .masonry { columns: 3; gap: 4px; margin-bottom: 100px; }
+        .m-item { break-inside: avoid; margin-bottom: 4px; overflow: hidden; position: relative; }
+        .m-item img { width: 100%; display: block; filter: grayscale(1); transition: 0.8s; }
+        .m-item:hover img { filter: grayscale(0); transform: scale(1.05); }
+
+        footer { padding: 60px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center; color: var(--mist); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <nav>
+        <a href="PHOTOGRAPHYBASIC.html" class="nav-logo">LUMIÈRE</a>
+        <ul class="nav-links">
+            <li><a href="photography_portfolio.html">Portfolio</a></li>
+            <li><a href="photography_team.html">Team</a></li>
+            <li><a href="photography_services.html">Services</a></li>
+            <li><a href="photography_booking.html">Booking</a></li>
+            <li><a href="photography_contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header class="sub-header">
+        <div class="container">
+            <h1>The <span>Visuals</span></h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="masonry">
+            <div class="m-item"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80"></div>
+            <div class="m-item"><img src="https://images.unsplash.com/photo-1511130541197-41405d252b72?w=600&q=80"></div>
+            <div class="m-item"><img src="https://images.unsplash.com/photo-1554080353-a576cf803bda?w=600&q=80"></div>
+            <div class="m-item"><img src="https://images.unsplash.com/photo-1520390138845-fd2d229dd553?w=600&q=80"></div>
+            <div class="m-item"><img src="https://images.unsplash.com/photo-1551316679-9c6ae9dec224?w=600&q=80"></div>
+            <div class="m-item"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80"></div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Lumiere Studio. Designed by Gurtej Singh.
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

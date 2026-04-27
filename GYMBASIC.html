@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Forge — Elevate Your Strength</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@200;300;400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        /* ─── RESET & BASE ─────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #050505;
+            --deep: #0a0a0a;
+            --coal: #111111;
+            --ash: #222222;
+            --crimson: #e63946;
+            --crimson-light: #ff4d6d;
+            --silver: #e0e0e0;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            width: 100%;
+            cursor: none;
+        }
+
+        /* Ambient Orbs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10vw;
+            left: -10vw;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 15s infinite ease-in-out alternate;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -15vw;
+            right: -15vw;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: floatReverse 20s infinite ease-in-out alternate;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10vw, 5vw); }
+        }
+
+        @keyframes floatReverse {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-5vw, -10vw); }
+        }
+
+        /* ─── CUSTOM CURSOR ─────────────────────────────── */
+        #cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--crimson);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform .1s, width .3s, height .3s;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 35px;
+            height: 35px;
+            border: 1px solid rgba(230, 57, 70, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform .15s ease-out;
+        }
+
+        /* ─── NAVIGATION ─────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 30px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to bottom, rgba(5, 5, 5, 0.8) 0%, transparent 100%);
+            transition: all 0.4s;
+        }
+
+        nav.scrolled {
+            padding: 15px 60px;
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo span {
+            color: var(--crimson);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-btn {
+            padding: 12px 28px;
+            background: var(--crimson);
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: none;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* ─── HERO ─────────────────────────────── */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('gym_hero.png') center/cover no-repeat;
+            z-index: -1;
+            transform: scale(1.1);
+            animation: zoomOut 10s forwards;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.3) 100%),
+                        linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%);
+        }
+
+        @keyframes zoomOut {
+            to { transform: scale(1); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            font-size: 0.7rem;
+            color: var(--crimson);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            line-height: 0.95;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .hero-title span {
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-main {
+            padding: 18px 45px;
+            background: var(--crimson);
+            color: var(--white);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .btn-main:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-5px);
+        }
+
+        /* ─── FEATURES ─────────────────────────────── */
+        section {
+            padding: 120px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            text-transform: uppercase;
+        }
+
+        .section-title span {
+            color: var(--crimson);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            border-color: var(--crimson);
+            background: rgba(230, 57, 70, 0.05);
+            transform: translateY(-10px);
+        }
+
+        .feature-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.8;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--crimson);
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        /* ─── BMI CALCULATOR (INTERACTIVE FEATURE) ─────────────────────────────── */
+        .bmi-container {
+            background: var(--coal);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .bmi-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bmi-form h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .bmi-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .bmi-input {
+            width: 100%;
+            background: var(--black);
+            border: 1px solid var(--ash);
+            padding: 15px 20px;
+            color: var(--white);
+            font-family: inherit;
+        }
+
+        .bmi-input:focus {
+            outline: none;
+            border-color: var(--crimson);
+        }
+
+        .bmi-result {
+            margin-top: 20px;
+            padding: 20px;
+            border-left: 2px solid var(--crimson);
+            background: rgba(230, 57, 70, 0.1);
+            display: none;
+        }
+
+        /* ─── FOOTER ─────────────────────────────── */
+        footer {
+            padding: 80px 0;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            display: block;
+            text-decoration: none;
+            color: var(--white);
+        }
+
+        .footer-logo span { color: var(--crimson); }
+
+        .copyright {
+            color: #555;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 991px) {
+            .grid-3 { grid-template-columns: 1fr 1fr; }
+            .bmi-container { grid-template-columns: 1fr; }
+            nav { padding: 20px 30px; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 767px) {
+            .grid-3 { grid-template-columns: 1fr; }
+            .hero-content { padding: 0 30px; }
+            .section-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <nav id="navbar">
+        <a href="#" class="nav-logo">IRON<span>FORGE.</span></a>
+        <ul class="nav-links">
+            <li><a href="gym_about.html">About</a></li>
+            <li><a href="gym_classes.html">Classes</a></li>
+            <li><a href="gym_trainers.html">Trainers</a></li>
+            <li><a href="#bmi">BMI Calc</a></li>
+            <li><a href="gym_contact.html">Contact</a></li>
+        </ul>
+        <button class="nav-btn">Join Now</button>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <span class="hero-tag">Push Beyond Limits</span>
+            <h1 class="hero-title">Forge Your <span>Legacy.</span></h1>
+            <div class="hero-cta">
+                <a href="#classes" class="btn-main">Explore Programs</a>
+                <a href="tel:9501071554" class="btn-main" style="background: transparent; border: 1px solid #fff;">Get In Touch</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Iron <span>Forge?</span></h2>
+            </div>
+            <div class="grid-3">
+                <div class="feature-card">
+                    <span class="feature-icon">🏋️‍♂️</span>
+                    <h3>Elite Equipment</h3>
+                    <p>State-of-the-art machines and free weights designed for maximum gains and peak performance.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔥</span>
+                    <h3>Pro Training</h3>
+                    <p>Learn from certified experts who have transformed thousands of lives through science-backed methods.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🥗</span>
+                    <h3>Nutrition Plans</h3>
+                    <p>Personalized diet guidance to fuel your workouts and recover faster than ever before.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="bmi" style="background: #000;">
+        <div class="container">
+            <div class="bmi-container">
+                <div class="bmi-form">
+                    <span class="hero-tag">Tools</span>
+                    <h2>Check Your <span>BMI</span></h2>
+                    <p style="color: #888; margin-bottom: 30px;">Calculate your Body Mass Index to start your fitness journey with the right data.</p>
+                    <div class="bmi-group">
+                        <input type="number" id="height" placeholder="Height (cm)" class="bmi-input">
+                        <input type="number" id="weight" placeholder="Weight (kg)" class="bmi-input">
+                    </div>
+                    <button class="btn-main" onclick="calculateBMI()">Calculate Now</button>
+                    <div id="bmi-result" class="bmi-result">
+                        <h4 id="bmi-val" style="font-size: 1.5rem; margin-bottom: 5px;">BMI: 22.4</h4>
+                        <p id="bmi-status">Status: Healthy Weight</p>
+                    </div>
+                </div>
+                <div class="bmi-img">
+                     <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" alt="BMI" style="width: 100%; border-radius: 10px; opacity: 0.6;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="packages">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our <span>Memberships</span></h2>
+            </div>
+            <div class="grid-3">
+                <div class="feature-card" style="border-top: 4px solid #444;">
+                    <div style="font-size: 0.7rem; letter-spacing: 2px; color: #888; margin-bottom: 10px;">BASIC</div>
+                    <h3 style="font-size: 2rem;">₹8,000<span>.</span></h3>
+                    <ul style="list-style: none; color: #888; font-size: 0.85rem; line-height: 2.5; margin-bottom: 30px;">
+                        <li>✓ 5 Pages + Trainer Profiles</li>
+                        <li>✓ WhatsApp Chat Button</li>
+                        <li>✓ Google Maps Integration</li>
+                        <li>✓ Basic SEO Setup</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-main" style="padding: 12px 30px; display: inline-block;">Select Plan</a>
+                </div>
+                <div class="feature-card" style="border-top: 4px solid var(--crimson); background: rgba(230, 57, 70, 0.05);">
+                    <div style="font-size: 0.7rem; letter-spacing: 2px; color: var(--crimson); margin-bottom: 10px;">PRO</div>
+                    <h3 style="font-size: 2rem;">₹18,000<span>.</span></h3>
+                    <ul style="list-style: none; color: #888; font-size: 0.85rem; line-height: 2.5; margin-bottom: 30px;">
+                        <li>✓ Everything in Basic</li>
+                        <li>✓ Automated Booking System</li>
+                        <li>✓ Member Login Portal</li>
+                        <li>✓ Advanced SEO & Analytics</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-main" style="padding: 12px 30px; display: inline-block;">Select Plan</a>
+                </div>
+                <div class="feature-card" style="border-top: 4px solid var(--white);">
+                    <div style="font-size: 0.7rem; letter-spacing: 2px; color: #fff; margin-bottom: 10px;">ELITE</div>
+                    <h3 style="font-size: 2rem;">₹40,000<span>.</span></h3>
+                    <ul style="list-style: none; color: #888; font-size: 0.85rem; line-height: 2.5; margin-bottom: 30px;">
+                        <li>✓ Everything in PRO</li>
+                        <li>✓ Full Member Dashboard</li>
+                        <li>✓ Calorie & Step Tracking</li>
+                        <li>✓ Custom Admin Panel</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-main" style="padding: 12px 30px; display: inline-block;">Select Plan</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">IRON<span>FORGE.</span></a>
+            <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
+                <a href="#" style="color: #888; text-decoration: none;">Instagram</a>
+                <a href="#" style="color: #888; text-decoration: none;">Twitter</a>
+                <a href="#" style="color: #888; text-decoration: none;">Facebook</a>
+            </div>
+            <p class="copyright">&copy; 2026 Iron Forge Fitness. Designed by GURTEJ SINGH.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+
+        // Navbar Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // BMI Calculation
+        function calculateBMI() {
+            const h = document.getElementById('height').value;
+            const w = document.getElementById('weight').value;
+            if (h > 0 && w > 0) {
+                const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
+                document.getElementById('bmi-val').innerText = 'BMI: ' + bmi;
+                let status = '';
+                if (bmi < 18.5) status = 'Underweight';
+                else if (bmi < 25) status = 'Healthy Weight';
+                else if (bmi < 30) status = 'Overweight';
+                else status = 'Obese';
+                document.getElementById('bmi-status').innerText = 'Status: ' + status;
+                document.getElementById('bmi-result').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

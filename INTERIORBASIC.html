@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetica — Defining Modern Spaces</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        /* ─── RESET & BASE ─────────────────────────────── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #faf9f6;
+            --text: #1a1a1a;
+            --accent: #c2a389;
+            --glass: rgba(255, 255, 255, 0.7);
+            --border: rgba(0, 0, 0, 0.05);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ─── CUSTOM CURSOR ─────────────────────────────── */
+        #cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--text);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease-out;
+            opacity: 0.2;
+        }
+
+        /* ─── NAVIGATION ─────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: 0.4s;
+        }
+
+        nav.scrolled {
+            padding: 20px 60px;
+            background: rgba(250, 249, 246, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 400;
+        }
+
+        /* ─── HERO ─────────────────────────────── */
+        .hero {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 0 60px;
+            gap: 60px;
+        }
+
+        .hero-text { padding-top: 100px; }
+        .hero-tag {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 0.7rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.8;
+            max-width: 500px;
+            margin-bottom: 40px;
+        }
+
+        .hero-img-wrap {
+            height: 80vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.1);
+            animation: slowZoom 15s infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            to { transform: scale(1); }
+        }
+
+        /* ─── SECTION ─────────────────────────────── */
+        section { padding: 120px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+        .section-intro { margin-bottom: 80px; }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+        }
+
+        /* ─── PORTFOLIO GRID ─────────────────────────────── */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .port-item {
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .port-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.6s;
+        }
+
+        .port-item:hover img { transform: scale(1.1); }
+
+        /* ─── PACKAGES ─────────────────────────────── */
+        .pricing-section { background: #111; color: #fff; }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .price-card {
+            background: #1a1a1a;
+            padding: 60px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+        }
+
+        .price-card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        .price-card h4 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 10px; }
+        .price-card .cost { font-size: 1.5rem; color: var(--accent); margin-bottom: 30px; display: block; }
+        .price-card ul { list-style: none; color: #888; font-size: 0.85rem; line-height: 2.2; margin-bottom: 40px; }
+
+        .btn-black {
+            background: #fff;
+            color: #000;
+            padding: 15px 30px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+
+        /* ─── FOOTER ─────────────────────────────── */
+        footer { padding: 80px 0; border-top: 1px solid var(--border); text-align: center; }
+        .f-logo { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 30px; display: block; text-decoration: none; color: var(--text); }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <nav id="navbar">
+        <a href="#" class="logo">AESTHETICA<span>.</span></a>
+        <div class="nav-links">
+            <a href="interior_about.html">Studio</a>
+            <a href="interior_projects.html">Projects</a>
+            <a href="#pricing">Packages</a>
+            <a href="interior_contact.html">Contact</a>
+        </div>
+        <a href="#contact" style="font-size: 0.6rem; letter-spacing: 2px; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--text);">ENQUIRE</a>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-text">
+            <span class="hero-tag">Interior Architecture</span>
+            <h1 class="hero-title">Space That <span>Inspires</span> Your Soul.</h1>
+            <p class="hero-desc">We craft timeless environments that blend minimalist aesthetics with functional luxury, creating homes that tell your unique story.</p>
+            <a href="#work" class="btn-black" style="background: #000; color: #fff;">View Projects</a>
+        </div>
+        <div class="hero-img-wrap">
+            <img src="interior_hero.png" alt="Interior" class="hero-img">
+        </div>
+    </div>
+
+    <section id="work">
+        <div class="container">
+            <div class="section-intro">
+                <h2 class="section-title">Case Studies</h2>
+            </div>
+            <div class="portfolio-grid">
+                <div class="port-item"><img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" alt="Work"></div>
+                <div class="port-item"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80" alt="Work"></div>
+                <div class="port-item"><img src="https://images.unsplash.com/photo-1615876234886-fd9a39faa97f?w=600&q=80" alt="Work"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="section-intro">
+                <h2 class="section-title" style="color: #fff;">Web & Tech <span>Packages</span></h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h4>Basic</h4>
+                    <span class="cost">₹7,000 - ₹12,000</span>
+                    <ul>
+                        <li>Visual Project Showcase</li>
+                        <li>Mood Board Mockups</li>
+                        <li>WhatsApp Enquiry Integration</li>
+                        <li>Responsive Image Galleries</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-black">Get Started</a>
+                </div>
+                <div class="price-card" style="border-color: var(--accent);">
+                    <h4 style="color: var(--accent);">Pro</h4>
+                    <span class="cost">₹18,000 - ₹28,000</span>
+                    <ul>
+                        <li>Everything in Basic</li>
+                        <li>Interactive Concept Planner</li>
+                        <li>Client Review Portal</li>
+                        <li>Project Management Sync</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-black">Most Popular</a>
+                </div>
+                <div class="price-card">
+                    <h4>Elite</h4>
+                    <span class="cost">₹40,000+</span>
+                    <ul>
+                        <li>Everything in Pro</li>
+                        <li>3D Model Integration Mockups</li>
+                        <li>Custom E-commerce Store</li>
+                        <li>Premium SEO & Local Listing</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-black">Enquire</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="f-logo">AESTHETICA<span>.</span></a>
+            <p style="color: #888; font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase;">London • Paris • Milan • New York</p>
+            <p style="margin-top: 40px; color: #444; font-size: 0.6rem;">&copy; 2026 Aesthetica Design Studio. Sample by GURTEJ SINGH.</p>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 100) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+    </script>
+</body>
+
+</html>

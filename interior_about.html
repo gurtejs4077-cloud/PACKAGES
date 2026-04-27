@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Studio — Aesthetica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #faf9f6;
+            --text: #1a1a1a;
+            --accent: #c2a389;
+            --glass: rgba(255, 255, 255, 0.7);
+            --border: rgba(0, 0, 0, 0.05);
+        }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; }
+        #cursor { position: fixed; width: 8px; height: 8px; background: var(--text); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+        #cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid var(--text); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: transform 0.15s ease-out; opacity: 0.2; }
+        
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(250, 249, 246, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; letter-spacing: 1px; text-decoration: none; color: var(--text); }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 400; }
+
+        .sub-header { padding: 180px 0 60px; text-align: center; }
+        .sub-header h1 { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 400; }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 40px; }
+        .content-box { margin-bottom: 100px; line-height: 2; color: #666; font-size: 1.1rem; }
+        .content-box h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--text); margin-bottom: 30px; font-weight: 400; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 60px; }
+        .img-wrap { aspect-ratio: 1/1; overflow: hidden; background: #eee; }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+        footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: center; color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <nav>
+        <a href="INTERIORBASIC.html" class="logo">AESTHETICA<span>.</span></a>
+        <div class="nav-links">
+            <a href="interior_about.html">Studio</a>
+            <a href="interior_projects.html">Projects</a>
+            <a href="INTERIORBASIC.html#pricing">Packages</a>
+            <a href="interior_contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="sub-header">
+        <div class="container">
+            <h1>The <span>Atelier</span></h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content-box">
+            <h2>Crafting Quiet Luxury</h2>
+            <p>Aesthetica is a design collective dedicated to the pursuit of spatial harmony. Founded in 2018, we have consistently pushed the boundaries of minimalist architecture, focusing on the interplay of natural light, raw materials, and human scale.</p>
+            <p>Our approach is rooted in the belief that a home should be a sanctuary—a place of rest and inspiration away from the digital noise of the modern world.</p>
+            
+            <div class="grid">
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80" alt="Studio"></div>
+                <div class="img-wrap" style="margin-top: 40px;"><img src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?w=600&q=80" alt="Process"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Aesthetica Studio. Designed by Gurtej Singh.
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

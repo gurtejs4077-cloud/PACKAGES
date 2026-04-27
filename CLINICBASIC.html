@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Health — Precision Medical Care</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        /* ─── RESET & BASE ─────────────────────────────── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2a5d67;
+            --secondary: #e0f2f1;
+            --accent: #ff7043;
+            --text-dark: #1a2a2d;
+            --text-light: #546e7a;
+            --bg: #ffffff;
+            --bg-alt: #f1f8f9;
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: rgba(42, 93, 103, 0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ─── CUSTOM CURSOR ─────────────────────────────── */
+        #cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            opacity: 0.3;
+        }
+
+        /* ─── NAVIGATION ─────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px 40px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: 0.4s;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center; gap: 8px;
+        }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        .btn-call {
+            padding: 10px 25px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        /* ─── HERO ─────────────────────────────── */
+        .hero {
+            padding-top: 180px;
+            padding-bottom: 100px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            align-items: center;
+            background: radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 40%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: var(--secondary);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .hero-title span { color: var(--accent); }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .hero-img-wrap {
+            position: relative;
+            height: 600px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(42, 93, 103, 0.1);
+        }
+
+        .hero-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ─── SERVICES ─────────────────────────────── */
+        section { padding: 100px 0; }
+
+        .section-tag { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 15px; display: block; text-align: center; }
+        .section-title { font-size: 2.8rem; text-align: center; color: var(--primary); margin-bottom: 60px; }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .service-card {
+            padding: 40px;
+            background: var(--bg-alt);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            transition: 0.4s;
+        }
+
+        .service-card:hover { transform: translateY(-10px); background: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+
+        .service-icon { font-size: 2.5rem; margin-bottom: 25px; display: block; }
+        .service-card h3 { font-size: 1.5rem; color: var(--primary); margin-bottom: 15px; }
+        .service-card p { color: var(--text-light); line-height: 1.6; font-size: 0.95rem; }
+
+        /* ─── BOOKING (INTERACTIVE) ─────────────────────────────── */
+        .booking-box {
+            background: var(--primary);
+            border-radius: 40px;
+            padding: 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            color: #fff;
+        }
+
+        .booking-form input, .booking-form select {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+
+        /* ─── PACKAGES ─────────────────────────────── */
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .pack-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .pack-card.popular { border: 2px solid var(--primary); transform: scale(1.05); }
+
+        /* ─── FOOTER ─────────────────────────────── */
+        footer { background: var(--bg-alt); padding: 80px 0; border-top: 1px solid var(--border); text-align: center; }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <nav id="navbar">
+        <a href="#" class="nav-logo">Lumina<span>Health</span></a>
+        <div class="nav-links">
+            <a href="clinic_about.html">About</a>
+            <a href="clinic_services.html">Services</a>
+            <a href="clinic_consultants.html">Consultants</a>
+            <a href="clinic_contact.html">Contact</a>
+        </div>
+        <a href="tel:9501071554" class="btn-call">Book Call</a>
+    </nav>
+
+    <div class="hero">
+        <div class="container" style="display: contents;">
+            <div style="padding-left: 80px;">
+                <span class="hero-badge">Excellence in Dentistry & Care</span>
+                <h1 class="hero-title">A Smarter Way to <span>Smile</span> and Heal.</h1>
+                <p class="hero-desc">Modern healthcare meets premium experience. We use state-of-the-art diagnostic tools to ensure your journey to health is seamless and stress-free.</p>
+                <a href="#booking" class="btn-call" style="padding: 18px 40px; font-size: 1rem;">Appointment Now</a>
+            </div>
+            <div style="padding-right: 80px;">
+                <div class="hero-img-wrap">
+                    <img src="clinic_hero.png" alt="Clinic" class="hero-img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="services">
+        <div class="container">
+            <span class="section-tag">Expertise</span>
+            <h2 class="section-title">Specialized Medical Services</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <span class="service-icon">🦷</span>
+                    <h3>Cosmetic Dentistry</h3>
+                    <p>Advanced veneer and whitening treatments to give you the perfect smile you deserve.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🔬</span>
+                    <h3>Full Body Checkup</h3>
+                    <p>Comprehensive diagnostic tests with same-day reports for proactive health management.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🩹</span>
+                    <h3>Primary Care</h3>
+                    <p>Family medical consultations with expert physicians tailored to your history.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="container">
+             <span class="section-tag">Web Packages</span>
+            <h2 class="section-title">Medical Digital Solutions</h2>
+            <div class="package-grid">
+                <div class="pack-card">
+                    <h3>Basic</h3>
+                    <div style="font-size: 2rem; color: var(--primary); margin: 20px 0;">₹8,000</div>
+                    <ul style="list-style: none; color: var(--text-light); line-height: 2.2; margin-bottom: 30px;">
+                        <li>5 Pages + Doctor Profiles</li>
+                        <li>WhatsApp Chat Integration</li>
+                        <li>Google Maps Location</li>
+                        <li>Patient Trust Badges</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-call" style="background: var(--bg-alt); color: var(--primary); border: 1px solid var(--border);">Select Plan</a>
+                </div>
+                <div class="pack-card popular">
+                    <h3>Professional</h3>
+                    <div style="font-size: 2rem; color: var(--primary); margin: 20px 0;">₹18,000</div>
+                    <ul style="list-style: none; color: var(--text-light); line-height: 2.2; margin-bottom: 30px;">
+                        <li>Everything in Basic</li>
+                        <li>Automated Appointment Booking</li>
+                        <li>Patient Portal Mockup</li>
+                        <li>Advanced Local SEO</li>
+                    </ul>
+                    <a href="tel:9501071554" class="btn-call">Popular Choice</a>
+                </div>
+                <div class="pack-card">
+                    <h3>SaaS Elite</h3>
+                    <div style="font-size: 2rem; color: var(--primary); margin: 20px 0;">₹45,000+</div>
+                    <ul style="list-style: none; color: var(--text-light); line-height: 2.2; margin-bottom: 30px;">
+                        <li>Full Patient CRM</li>
+                        <li>Auto SMS Reminders</li>
+                        <li>Digital Prescription Panel</li>
+                        <li>Revenue Analytics</li>
+                    </ul>
+                     <a href="tel:9501071554" class="btn-call" style="background: var(--bg-alt); color: var(--primary); border: 1px solid var(--border);">Strategy Call</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <h3>LuminaHealth<span>.</span></h3>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 20px;">Premium Medical Web Experience Designed by GURTEJ SINGH.</p>
+            <p style="color: #ccc; font-size: 0.7rem; margin-top: 40px;">&copy; 2026 Lumina Medical Group. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.style.top = '10px';
+                nav.style.padding = '15px 30px';
+            } else {
+                nav.style.top = '20px';
+                nav.style.padding = '20px 40px';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultants — Lumina Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2a5d67;
+            --secondary: #e0f2f1;
+            --accent: #ff7043;
+            --text-dark: #1a2a2d;
+            --text-light: #546e7a;
+            --bg: #ffffff;
+            --bg-alt: #f1f8f9;
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: rgba(42, 93, 103, 0.1);
+        }
+        body { background-color: var(--bg); color: var(--text-dark); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; cursor: none; }
+        #cursor { position: fixed; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+        #cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid var(--primary); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: transform 0.1s ease-out; opacity: 0.3; }
+        
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; padding: 20px 40px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 100px; display: flex; justify-content: space-between; align-items: center; z-index: 100;
+        }
+        .nav-logo { font-weight: 700; font-size: 1.4rem; color: var(--primary); text-decoration: none; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-size: 0.85rem; font-weight: 500; }
+
+        .sub-header { padding: 180px 0 60px; text-align: center; background: var(--bg-alt); }
+        .sub-header h1 { font-size: 3.5rem; font-weight: 700; color: var(--primary); }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+        
+        .doc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 100px; }
+        .doc-card { text-align: center; }
+        .doc-img-wrap { width: 100%; aspect-ratio: 1/1; border-radius: 50%; overflow: hidden; margin-bottom: 25px; border: 10px solid var(--bg-alt); transition: 0.4s; }
+        .doc-card:hover .doc-img-wrap { border-color: var(--secondary); transform: scale(1.05); }
+        .doc-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .doc-card h3 { color: var(--primary); font-size: 1.5rem; margin-bottom: 10px; }
+        .doc-card span { color: var(--accent); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        footer { padding: 60px 0; background: var(--bg-alt); border-top: 1px solid var(--border); text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <nav>
+        <a href="CLINICBASIC.html" class="nav-logo">Lumina<span>Health</span></a>
+        <div class="nav-links">
+            <a href="clinic_about.html">About</a>
+            <a href="clinic_services.html">Services</a>
+            <a href="clinic_consultants.html">Consultants</a>
+            <a href="clinic_contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <header class="sub-header">
+        <div class="container">
+            <h1>Our <span>Experts</span></h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="doc-grid">
+            <div class="doc-card">
+                <div class="doc-img-wrap"><img src="https://images.unsplash.com/photo-1559839734-2b71f1536780?w=600&q=80" alt="Doctor"></div>
+                <h3>Dr. Elena Vance</h3>
+                <span>Lead Cardiologist</span>
+            </div>
+            <div class="doc-card">
+                <div class="doc-img-wrap"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80" alt="Doctor"></div>
+                <h3>Dr. Julian Thorne</h3>
+                <span>Neuro Surgeon</span>
+            </div>
+            <div class="doc-card">
+                <div class="doc-img-wrap"><img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=600&q=80" alt="Doctor"></div>
+                <h3>Dr. Anya Kovic</h3>
+                <span>Pediatric Specialist</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Lumina Health. Designed by Gurtej Singh.
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>
