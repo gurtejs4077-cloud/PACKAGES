@@ -228,9 +228,95 @@
         @media (max-width: 992px) {
             .container {
                 grid-template-columns: 1fr;
+                padding-top: 100px;
+                gap: 50px;
+            }
+            .contact-info h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(6, 11, 22, 0.95);
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                cursor: pointer;
+            }
+
+            .hamburger span {
+                width: 25px;
+                height: 2px;
+                background: var(--gold);
+                transition: 0.3s;
+            }
+
+            .inquiry-form {
+                padding: 30px;
             }
         }
     </style>
+
+    
+    
+
+    <style id="mobile-excellence-fix">
+        @media (max-width: 768px) {
+            nav { padding: 0 20px !important; height: 80px !important; justify-content: space-between !important; display: flex !important; align-items: center !important; }
+            .logo, .nav-logo { font-size: 1.1rem !important; flex-grow: 1; }
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(6, 11, 22, 0.98);
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                z-index: 1000;
+                height: auto;
+                text-align: center;
+            }
+            .nav-links.open { display: flex !important; }
+            .hamburger { display: flex !important; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; order: 3; margin-left: 15px; }
+            .hamburger span { width: 25px; height: 2px; background: #c9a84c; transition: 0.3s; }
+            nav .btn-gold, nav .btn-primary, nav .nav-cta, nav .nav-cta-mobile { display: none !important; }
+            h1 { font-size: clamp(2.2rem, 10vw, 3.5rem) !important; line-height: 1.2 !important; }
+            h2 { font-size: clamp(1.8rem, 8vw, 2.5rem) !important; }
+            .container { padding: 120px 20px 60px !important; grid-template-columns: 1fr !important; gap: 40px !important; }
+            .about-grid, .contact-grid, .expertise-grid, .pricing-grid, .academics-grid, .footer-grid, .numbers-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .hero-title { font-size: clamp(2.5rem, 12vw, 4rem) !important; }
+            .hero-content { padding: 0 20px !important; }
+            .sub-hero { height: 50vh !important; }
+            .hero-stats { display: none !important; }
+            .academic-card, .exp-card, .p-card, .niche-card { padding: 30px 20px !important; }
+            #cursor, #cursor-ring { display: none !important; }
+            body { cursor: default !important; }
+        }
+    </style>
+    
 </head>
 
 <body>
@@ -240,33 +326,33 @@
                 style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
             Aetheria International
         </a>
-        <ul class="nav-links" id="navLinks" style="display: flex; gap: 30px; list-style: none;">
-            <li><a href="school_about.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">About</a>
-            </li>
-            <li><a href="school_academics.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Programs</a>
-            </li>
-            <li><a href="school_faculty.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Faculty</a>
-            </li>
-            <li><a href="school_staff.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Management
-                    Committee</a></li>
-            <li><a href="school_gallery.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Gallery</a>
-            </li>
-            <li><a href="school_events.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Events</a>
-            </li>
-            <li><a href="school_admissions.html"
-                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Admissions</a>
-            </li>
-            <li><a href="school_contact.html"
-                    style="color: var(--gold); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
-                    Now</a></li>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="school_about.html">About</a></li>
+            <li><a href="school_academics.html">Programs</a></li>
+            <li><a href="school_faculty.html">Faculty</a></li>
+            <li><a href="school_staff.html">Management Committee</a></li>
+            <li><a href="school_gallery.html">Gallery</a></li>
+            <li><a href="school_events.html">Events</a></li>
+            <li><a href="school_admissions.html">Admissions</a></li>
+            <li><a href="school_contact.html" class="nav-cta-mobile">Enquire Now</a></li>
         </ul>
+        <div class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+            <span></span><span></span><span></span>
+        </div>
     </nav>
+
+    <style>
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-cta-mobile { color: var(--gold) !important; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px; }
+        
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+        }
+        @media (min-width: 769px) {
+            .hamburger { display: none; }
+        }
+    </style>
 
     <div class="container">
         <div class="contact-info whoa-reveal">

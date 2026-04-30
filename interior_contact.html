@@ -50,6 +50,49 @@
 
         footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: center; color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; }
     </style>
+
+    
+    
+
+    <style id="mobile-excellence-fix">
+        @media (max-width: 768px) {
+            nav { padding: 0 20px !important; height: 80px !important; justify-content: space-between !important; display: flex !important; align-items: center !important; }
+            .logo, .nav-logo { font-size: 1.1rem !important; flex-grow: 1; }
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(6, 11, 22, 0.98);
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                z-index: 1000;
+                height: auto;
+                text-align: center;
+            }
+            .nav-links.open { display: flex !important; }
+            .hamburger { display: flex !important; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; order: 3; margin-left: 15px; }
+            .hamburger span { width: 25px; height: 2px; background: #c9a84c; transition: 0.3s; }
+            nav .btn-gold, nav .btn-primary, nav .nav-cta, nav .nav-cta-mobile { display: none !important; }
+            h1 { font-size: clamp(2.2rem, 10vw, 3.5rem) !important; line-height: 1.2 !important; }
+            h2 { font-size: clamp(1.8rem, 8vw, 2.5rem) !important; }
+            .container { padding: 120px 20px 60px !important; grid-template-columns: 1fr !important; gap: 40px !important; }
+            .about-grid, .contact-grid, .expertise-grid, .pricing-grid, .academics-grid, .footer-grid, .numbers-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+            .hero-title { font-size: clamp(2.5rem, 12vw, 4rem) !important; }
+            .hero-content { padding: 0 20px !important; }
+            .sub-hero { height: 50vh !important; }
+            .hero-stats { display: none !important; }
+            .academic-card, .exp-card, .p-card, .niche-card { padding: 30px 20px !important; }
+            #cursor, #cursor-ring { display: none !important; }
+            body { cursor: default !important; }
+        }
+    </style>
+    
 </head>
 <body>
     <div id="cursor"></div>
@@ -62,6 +105,8 @@
             <a href="INTERIORBASIC.html#pricing">Packages</a>
             <a href="interior_contact.html">Contact</a>
         </div>
+        <div class="hamburger" id="hamburger" onclick="document.querySelector(\'.nav-links\').classList.toggle(\'open\')"><span></span><span></span><span></span></div>
+        
     </nav>
 
     <header class="sub-header">
