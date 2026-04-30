@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria — Upcoming Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --cream: #faf8f2;
+            --text: #e8e4d8;
+            --glass-bg: rgba(255, 255, 255, 0.015);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        /* iOS 26 Glass Effect */
+        .glass-ios {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: rgba(6, 11, 22, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crest {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--gold);
+            display: grid;
+            place-items: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .logo-img-header {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.3));
+        }
+
+        .container {
+            padding: 140px 5vw 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .page-title em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .event-card {
+            padding: 40px;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .event-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            background: rgba(201, 168, 76, 0.05);
+            border-color: var(--gold);
+        }
+
+        .event-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .event-month {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 30px;
+        }
+
+        .event-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .event-card p {
+            font-size: 0.95rem;
+            color: rgba(232, 228, 216, 0.7);
+            line-height: 1.7;
+        }
+
+        .event-tag {
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--gold);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-top: 25px;
+        }
+
+        /* Whoa Transitions */
+        .whoa-reveal {
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .whoa-reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 3rem;
+            }
+
+            .container {
+                padding-top: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="school_basic.html" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links" id="navLinks" style="display: flex; gap: 30px; list-style: none;">
+            <li><a href="school_about.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">About</a>
+            </li>
+            <li><a href="school_academics.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Programs</a>
+            </li>
+            <li><a href="school_faculty.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Faculty</a>
+            </li>
+            <li><a href="school_staff.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Management
+                    Committee</a></li>
+            <li><a href="school_gallery.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Gallery</a>
+            </li>
+            <li><a href="school_events.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Events</a>
+            </li>
+            <li><a href="school_admissions.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Admissions</a>
+            </li>
+            <li><a href="school_contact.html"
+                    style="color: var(--gold); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
+                    Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="header reveal">
+            <img src="aetheria_school_logo.png" alt="Aetheria Logo" class="logo-img-header">
+            <p>Institutional Calendar</p>
+            <h1 class="page-title whoa-reveal">Upcoming <em>Events</em></h1>
+        </div>
+
+        <div class="events-grid">
+            <div class="event-card glass-ios whoa-reveal" style="transition-delay: 0.1s;">
+                <div class="event-date">12</div>
+                <div class="event-month">May 2025</div>
+                <h3>Annual Science Olympiad</h3>
+                <p>An intense inter-school competition pushing the boundaries of scientific inquiry and robotics.</p>
+                <div class="event-tag">Academic</div>
+            </div>
+
+            <div class="event-card glass-ios whoa-reveal" style="transition-delay: 0.2s;">
+                <div class="event-date">22</div>
+                <div class="event-month">May 2025</div>
+                <h3>Cultural Exchange Fest</h3>
+                <p>Experience the richness of global cultures through dance, music, and culinary arts.</p>
+                <div class="event-tag">Cultural</div>
+            </div>
+
+            <div class="event-card glass-ios whoa-reveal" style="transition-delay: 0.3s;">
+                <div class="event-date">05</div>
+                <div class="event-month">Jun 2025</div>
+                <h3>Sports Championship</h3>
+                <p>Our annual athletics meet where discipline meets determination on the track.</p>
+                <div class="event-tag">Athletics</div>
+            </div>
+
+            <div class="event-card glass-ios whoa-reveal" style="transition-delay: 0.4s;">
+                <div class="event-date">18</div>
+                <div class="event-month">Jun 2025</div>
+                <h3>Art Exhibition</h3>
+                <p>A gallery showcase of fine arts, photography, and sculpture created by our students.</p>
+                <div class="event-tag">Creative</div>
+            </div>
+
+            <div class="event-card glass-ios whoa-reveal" style="transition-delay: 0.5s;">
+                <div class="event-date">02</div>
+                <div class="event-month">Jul 2025</div>
+                <h3>Tech-Innovation Summit</h3>
+                <p>Bringing together industry leaders and students to discuss the future of AI and Robotics.</p>
+                <div class="event-tag">Technology</div>
+            </div>
+
+            <div class="event-card glass-ios whoa-reveal" style="transition-delay: 0.6s;">
+                <div class="event-date">15</div>
+                <div class="event-month">Aug 2025</div>
+                <h3>Founder's Day</h3>
+                <p>A grand celebration of our history, values, and the vision that built Aetheria.</p>
+                <div class="event-tag">Ceremony</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Aetheria International School. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.whoa-reveal').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+
+</html>

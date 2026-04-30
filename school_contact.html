@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria — Contact Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --text: #e8e4d8;
+            --glass-bg: rgba(255, 255, 255, 0.015);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1.2s ease, transform 1.2s ease;
+        }
+
+        body.page-loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: rgba(6, 11, 22, 0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crest {
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--gold);
+            display: grid;
+            place-items: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .logo-img-header {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.3));
+        }
+
+        .container {
+            padding: 140px 5vw 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 80px;
+        }
+
+        .contact-info h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .contact-info h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .contact-info p {
+            color: rgba(232, 228, 216, 0.7);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 50px;
+        }
+
+        .info-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .info-card h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .info-card p {
+            font-size: 1rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .map-frame {
+            border-radius: 30px;
+            overflow: hidden;
+            border: var(--glass-border);
+            height: 450px;
+            margin-top: 40px;
+        }
+
+        .map-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: invert(90%) hue-rotate(180deg) brightness(0.9);
+        }
+
+        .inquiry-form {
+            padding: 50px;
+        }
+
+        .inquiry-form h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border: none;
+            border-radius: 12px;
+            color: var(--deep);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.3);
+        }
+
+        .whoa-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .whoa-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="school_basic.html" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links" id="navLinks" style="display: flex; gap: 30px; list-style: none;">
+            <li><a href="school_about.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">About</a>
+            </li>
+            <li><a href="school_academics.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Programs</a>
+            </li>
+            <li><a href="school_faculty.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Faculty</a>
+            </li>
+            <li><a href="school_staff.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Management
+                    Committee</a></li>
+            <li><a href="school_gallery.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Gallery</a>
+            </li>
+            <li><a href="school_events.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Events</a>
+            </li>
+            <li><a href="school_admissions.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Admissions</a>
+            </li>
+            <li><a href="school_contact.html"
+                    style="color: var(--gold); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
+                    Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="contact-info whoa-reveal">
+            <img src="aetheria_school_logo.png" alt="Aetheria Logo" class="logo-img-header" style="margin-left: -5px;">
+            <h1>Get In <em>Touch.</em></h1>
+            <p>Our dedicated team is ready to assist you with admissions, campus visits, or any other inquiries you may
+                have.</p>
+
+            <div class="info-card whoa-reveal" style="transition-delay: 0.1s;">
+                <div>
+                    <h4>Campus Address</h4>
+                    <p>Knowledge Park, Sector 12, Punjab, India</p>
+                </div>
+            </div>
+
+            <div class="info-card whoa-reveal" style="transition-delay: 0.2s;">
+                <div>
+                    <h4>Admissions Office</h4>
+                    <p>Phone: +91 95010 71554</p>
+                    <p>Email: admissions@aetheria.edu</p>
+                </div>
+            </div>
+
+            <div class="info-card whoa-reveal" style="transition-delay: 0.3s;">
+                <div>
+                    <h4>Office Hours</h4>
+                    <p>Mon - Fri: 8:00 AM - 4:00 PM</p>
+                    <p>Sat: 9:00 AM - 1:00 PM</p>
+                </div>
+            </div>
+
+            <div class="map-frame whoa-reveal" style="transition-delay: 0.4s;">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d109741.02912911311!2d76.6934887341144!3d30.73222475141014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fed0be66148bb%3A0x7a5ef3501f51f463!2sChandigarh!5e0!3m2!1sen!2sin!4v1714390000000!5m2!1sen!2sin"
+                    allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="inquiry-form glass-ios whoa-reveal" style="transition-delay: 0.5s;">
+            <h2>Send an <em>Inquiry</em></h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="example@mail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <select>
+                        <option>General Inquiry</option>
+                        <option>Admissions</option>
+                        <option>Careers</option>
+                        <option>Feedback</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea rows="6" placeholder="How can we help you today?"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Submit Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('page-loaded');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.whoa-reveal').forEach(el => observer.observe(el));
+        });
+
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Your message has been sent successfully.');
+        });
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.getAttribute('href').startsWith('#')) return;
+                e.preventDefault();
+                const target = link.getAttribute('href');
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'scale(0.95)';
+                setTimeout(() => { window.location.href = target; }, 800);
+            });
+        });
+    </script>
+</body>
+
+</html>

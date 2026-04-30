@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria — Academics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --text: #e8e4d8;
+            --glass-bg: rgba(255, 255, 255, 0.015);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1.2s ease, transform 1.2s ease;
+        }
+
+        body.page-loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .glass-ios {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: rgba(6, 11, 22, 0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crest {
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--gold);
+            display: grid;
+            place-items: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .logo-img-header {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.3));
+        }
+
+        .container {
+            padding: 140px 5vw 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+        }
+
+        .header h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .academics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        .academic-card {
+            overflow: hidden;
+            border-radius: 40px;
+            transition: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .academic-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--gold);
+        }
+
+        .card-img {
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1s;
+            filter: brightness(0.8);
+        }
+
+        .academic-card:hover .card-img img {
+            transform: scale(1.1);
+            filter: brightness(1);
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .card-body h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold-light);
+            margin-bottom: 15px;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+            color: rgba(232, 228, 216, 0.7);
+            line-height: 1.7;
+        }
+
+        .whoa-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .whoa-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .academics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="school_basic.html" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links" id="navLinks" style="display: flex; gap: 30px; list-style: none;">
+            <li><a href="school_about.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">About</a>
+            </li>
+            <li><a href="school_academics.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Programs</a>
+            </li>
+            <li><a href="school_faculty.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Faculty</a>
+            </li>
+            <li><a href="school_staff.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Management
+                    Committee</a></li>
+            <li><a href="school_gallery.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Gallery</a>
+            </li>
+            <li><a href="school_events.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Events</a>
+            </li>
+            <li><a href="school_admissions.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Admissions</a>
+            </li>
+            <li><a href="school_contact.html"
+                    style="color: var(--gold); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
+                    Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="header whoa-reveal">
+            <img src="aetheria_school_logo.png" alt="Aetheria Logo" class="logo-img-header">
+            <p style="color: var(--gold); text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px;">
+                Curriculum Pathways</p>
+            <h1>Academic <em>Excellence</em></h1>
+        </div>
+
+        <div class="academics-grid">
+            <div class="academic-card glass-ios whoa-reveal">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&q=80"
+                        alt="Pre-Primary">
+                </div>
+                <div class="card-body">
+                    <h3>Early Childhood</h3>
+                    <p>Fostering wonder and curiosity through play-based discovery. Our foundational years emphasize
+                        social growth and creative exploration.</p>
+                </div>
+            </div>
+
+            <div class="academic-card glass-ios whoa-reveal" style="transition-delay: 0.2s;">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&q=80" alt="Primary">
+                </div>
+                <div class="card-body">
+                    <h3>Primary School</h3>
+                    <p>Building strong analytical and linguistic foundations. We encourage students to challenge the
+                        status quo and think independently.</p>
+                </div>
+            </div>
+
+            <div class="academic-card glass-ios whoa-reveal" style="transition-delay: 0.4s;">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&q=80" alt="Secondary">
+                </div>
+                <div class="card-body">
+                    <h3>Senior Secondary</h3>
+                    <p>Preparing the leaders of tomorrow with rigorous academic programs and global university placement
+                        support across all major streams.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('page-loaded');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.whoa-reveal').forEach(el => observer.observe(el));
+        });
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.getAttribute('href').startsWith('#')) return;
+                e.preventDefault();
+                const target = link.getAttribute('href');
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'scale(0.95)';
+                setTimeout(() => { window.location.href = target; }, 800);
+            });
+        });
+    </script>
+</body>
+
+</html>

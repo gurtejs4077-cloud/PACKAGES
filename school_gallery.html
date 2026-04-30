@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria — Visual Journey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --text: #e8e4d8;
+            --glass-bg: rgba(255, 255, 255, 0.01);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: rgba(6, 11, 22, 0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crest {
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--gold);
+            display: grid;
+            place-items: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .logo-img-header {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.3));
+        }
+
+        .container {
+            padding: 140px 5vw 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            font-weight: 300;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .header h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 40px;
+            height: 500px;
+            cursor: pointer;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            filter: brightness(0.7) saturate(0.8);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            border-color: var(--gold);
+            z-index: 10;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.9) saturate(1.1);
+        }
+
+        .item-info {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent 50%, rgba(6, 11, 22, 0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .gallery-item:hover .item-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .item-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: var(--gold-light);
+            margin-bottom: 5px;
+        }
+
+        .item-info p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 1px;
+        }
+
+        /* Whoa Reveal Effect */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="school_basic.html" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links" id="navLinks" style="display: flex; gap: 30px; list-style: none;">
+            <li><a href="school_about.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">About</a>
+            </li>
+            <li><a href="school_academics.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Programs</a>
+            </li>
+            <li><a href="school_faculty.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Faculty</a>
+            </li>
+            <li><a href="school_staff.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Management
+                    Committee</a></li>
+            <li><a href="school_gallery.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Gallery</a>
+            </li>
+            <li><a href="school_events.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Events</a>
+            </li>
+            <li><a href="school_admissions.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Admissions</a>
+            </li>
+            <li><a href="school_contact.html"
+                    style="color: var(--gold); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
+                    Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="header reveal">
+            <img src="aetheria_school_logo.png" alt="Aetheria Logo" class="logo-img-header">
+            <p>Visual Experience</p>
+            <h1>Captured <em>Moments</em></h1>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1000&q=80" alt="Sports Day">
+                <div class="item-info">
+                    <h3>Athletics Meet</h3>
+                    <p>Building strength and resilience on the track.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item reveal" style="transition-delay: 0.1s;">
+                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1000&q=80" alt="Innovation">
+                <div class="item-info">
+                    <h3>Innovation Lab</h3>
+                    <p>Where young minds build the future of robotics.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item reveal" style="transition-delay: 0.2s;">
+                <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1000&q=80" alt="Library">
+                <div class="item-info">
+                    <h3>Knowledge Haven</h3>
+                    <p>80,000+ volumes of inspiration and research.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item reveal" style="transition-delay: 0.3s;">
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1000&q=80" alt="Culture">
+                <div class="item-info">
+                    <h3>Cultural Gala</h3>
+                    <p>A celebration of global diversity and heritage.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item reveal" style="transition-delay: 0.4s;">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1000&q=80" alt="Graduation">
+                <div class="item-info">
+                    <h3>Legacy Batch</h3>
+                    <p>Celebrating our graduates as they take flight.</p>
+                </div>
+            </div>
+
+            <div class="gallery-item reveal" style="transition-delay: 0.5s;">
+                <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1000&q=80" alt="Arts">
+                <div class="item-info">
+                    <h3>Performing Arts</h3>
+                    <p>Expressing soul through music, dance, and theatre.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+
+</html>

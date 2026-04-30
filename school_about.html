@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria — Our Story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --text: #e8e4d8;
+            --glass-bg: rgba(255, 255, 255, 0.015);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.page-loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .glass-ios {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: rgba(6, 11, 22, 0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crest {
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--gold);
+            display: grid;
+            place-items: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .sub-hero {
+            height: 60vh;
+            background: linear-gradient(rgba(6, 11, 22, 0.7), rgba(6, 11, 22, 0.7)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1600&q=80') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .logo-img-header {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.3));
+        }
+
+        .content {
+            padding: 100px 5vw;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            margin-bottom: 30px;
+        }
+
+        .about-text p {
+            color: rgba(232, 228, 216, 0.7);
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .vision-box {
+            padding: 50px;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .vision-box h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .vision-box blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            line-height: 1.4;
+            color: #fff;
+        }
+
+        .whoa-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .whoa-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sub-hero h1 {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="school_basic.html" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links" id="navLinks" style="display: flex; gap: 30px; list-style: none;">
+            <li><a href="school_about.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">About</a>
+            </li>
+            <li><a href="school_academics.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Programs</a>
+            </li>
+            <li><a href="school_faculty.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Faculty</a>
+            </li>
+            <li><a href="school_staff.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Management
+                    Committee</a></li>
+            <li><a href="school_gallery.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Gallery</a>
+            </li>
+            <li><a href="school_events.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Events</a>
+            </li>
+            <li><a href="school_admissions.html"
+                    style="color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Admissions</a>
+            </li>
+            <li><a href="school_contact.html"
+                    style="color: var(--gold); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
+                    Now</a></li>
+        </ul>
+    </nav>
+
+    <section class="sub-hero">
+        <div class="whoa-reveal visible">
+            <img src="aetheria_school_logo.png" alt="Aetheria Logo" class="logo-img-header">
+            <h1>Our <em>Legacy</em></h1>
+            <p style="color: var(--gold); text-transform: uppercase; letter-spacing: 5px; margin-top: 20px;">Founded
+                1998</p>
+        </div>
+    </section>
+
+    <div class="content">
+        <div class="about-grid">
+            <div class="about-text whoa-reveal">
+                <h2>Shaping <em>Young Minds</em></h2>
+                <p>At Aetheria, we believe that education is not the filling of a pail, but the lighting of a fire. For
+                    over two decades, we have provided a sanctuary for learning where intellectual curiosity is
+                    celebrated and character is forged.</p>
+                <p>Our philosophy blends the rigor of traditional academics with the fluidity of modern innovation,
+                    ensuring our students are prepared for the complexities of the 21st century.</p>
+            </div>
+            <div class="about-img whoa-reveal" style="transition-delay: 0.2s;">
+                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=800&q=80" alt="Campus"
+                    style="width: 100%; border-radius: 30px; filter: brightness(0.8);">
+            </div>
+        </div>
+
+        <div class="vision-box glass-ios whoa-reveal">
+            <h3>Our Vision</h3>
+            <blockquote>"To be the lighthouse of global education, illuminating paths of excellence and nurturing
+                leaders who serve humanity with wisdom and compassion."</blockquote>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Aetheria International School. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('page-loaded');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.whoa-reveal').forEach(el => observer.observe(el));
+        });
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.getAttribute('href').startsWith('#')) return;
+                e.preventDefault();
+                const target = link.getAttribute('href');
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'scale(0.95)';
+                setTimeout(() => { window.location.href = target; }, 800);
+            });
+        });
+    </script>
+</body>
+
+</html>

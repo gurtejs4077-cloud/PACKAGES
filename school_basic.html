@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria International School</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --gold-pale: #f5e6b8;
+            --cream: #faf8f2;
+            --text: #e8e4d8;
+            --muted: #8a8275;
+            --glass-ios: rgba(255, 255, 255, 0.015);
+            --glass-ios-blur: blur(40px) saturate(180%);
+            --glass-ios-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-ios-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+            opacity: 0;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.page-loaded {
+            opacity: 1;
+        }
+
+        /* ── iOS 26 Glass Effect ── */
+        .glass-premium {
+            background: var(--glass-ios);
+            backdrop-filter: var(--glass-ios-blur);
+            -webkit-backdrop-filter: var(--glass-ios-blur);
+            border: var(--glass-ios-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-ios-shadow);
+        }
+
+        /* ── Custom Cursor ── */
+        #cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(201, 168, 76, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease, width 0.3s, height 0.3s, opacity 0.3s;
+        }
+
+        body:has(a:hover, button:hover) #cursor {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+        }
+
+        body:has(a:hover, button:hover) #cursor-ring {
+            width: 50px;
+            height: 50px;
+            border-color: var(--gold);
+        }
+
+        /* ── Noise Overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            background: rgba(6, 11, 22, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: height 0.3s;
+        }
+
+        nav.scrolled {
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo span.crest {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid var(--gold);
+            display: grid;
+            place-items: center;
+            font-size: 1rem;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Outfit';
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--deep) !important;
+            padding: 10px 24px;
+            font-weight: 600 !important;
+            border-radius: 2px;
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--gold);
+            display: block;
+            transition: all 0.3s;
+        }
+
+        /* ── HERO ── */
+        #hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1562774053-701939374585?w=1800&q=80') center/cover no-repeat;
+            transform: scale(1.08);
+            transition: transform 8s ease;
+            filter: brightness(0.35) saturate(0.7);
+        }
+
+        #hero:hover .hero-bg {
+            transform: scale(1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(6, 11, 22, 0.3) 0%, rgba(6, 11, 22, 0) 40%, rgba(6, 11, 22, 0.95) 100%);
+        }
+
+        .hero-logo-img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(201, 168, 76, 0.3));
+            animation: fadeInDown 1.5s ease forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 2rem;
+        }
+
+        .hero-label {
+            font-family: 'Cinzel';
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 1s 0.3s forwards;
+        }
+
+        .hero-label::before,
+        .hero-label::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond';
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            line-height: 1.05;
+            color: #fff;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .hero-subtitle {
+            margin-top: 1.5rem;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            color: rgba(232, 228, 216, 0.65);
+            line-height: 1.8;
+            max-width: 600px;
+            margin-inline: auto;
+            opacity: 0;
+            animation: fadeUp 1s 0.9s forwards;
+        }
+
+        .hero-btns {
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 1s 1.2s forwards;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--deep);
+            padding: 14px 36px;
+            font-family: 'Outfit';
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(201, 168, 76, 0.5);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--cream);
+            padding: 14px 36px;
+            font-family: 'Outfit';
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 1s 1.5s forwards;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(var(--gold), transparent);
+            animation: scrollPulse 2s infinite;
+        }
+
+        @keyframes scrollPulse {
+
+            0%,
+            100% {
+                opacity: 0.3
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: 3rem;
+            right: 5vw;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: right;
+            opacity: 0;
+            animation: fadeUp 1s 1.4s forwards;
+        }
+
+        .hero-stat .num {
+            font-family: 'Cormorant Garamond';
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .hero-stat .label {
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ── SECTIONS BASE ── */
+        section {
+            padding: 8rem 5vw;
+            position: relative;
+        }
+
+        .section-tag {
+            font-family: 'Cinzel';
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-tag::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond';
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            color: #fff;
+        }
+
+        .section-title em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-bar {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            padding: 14px 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 3rem;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+
+        .marquee-track span {
+            font-family: 'Cinzel';
+            font-size: 0.72rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--deep);
+            white-space: nowrap;
+        }
+
+        .marquee-dot {
+            color: rgba(6, 11, 22, 0.4);
+        }
+
+        @keyframes marquee {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ── ABOUT ── */
+        #about {
+            background: var(--navy);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .about-img-wrap {
+            position: relative;
+        }
+
+        .about-img-wrap img {
+            width: 100%;
+            height: 550px;
+            object-fit: cover;
+            border-radius: 2px;
+            filter: brightness(0.85) contrast(1.1);
+        }
+
+        .about-img-badge {
+            position: absolute;
+            bottom: -2rem;
+            right: -2rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--deep);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 2px;
+            font-family: 'Cormorant Garamond';
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-img-badge .big {
+            font-size: 3rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .about-img-badge .small {
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            font-family: 'Outfit';
+        }
+
+        .about-text {
+            padding-left: 1rem;
+        }
+
+        .about-text p {
+            color: rgba(232, 228, 216, 0.7);
+            line-height: 1.9;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .about-pillars {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .pillar {
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            background: var(--glass);
+            border-radius: 2px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .pillar:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+        }
+
+        .pillar-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar h4 {
+            font-family: 'Cinzel';
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* ── PROGRAMS ── */
+        #programs {
+            background: var(--deep);
+        }
+
+        .programs-intro {
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        .programs-intro p {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-top: 1rem;
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5px;
+            background: var(--glass-border);
+            border: 1px solid var(--glass-border);
+        }
+
+        .program-card {
+            background: var(--navy);
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.4s;
+        }
+
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+            transform-origin: left;
+        }
+
+        .program-card:hover {
+            background: rgba(201, 168, 76, 0.05);
+        }
+
+        .program-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .prog-num {
+            font-family: 'Cormorant Garamond';
+            font-size: 5rem;
+            font-weight: 300;
+            color: rgba(201, 168, 76, 0.08);
+            line-height: 1;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .prog-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .prog-title {
+            font-family: 'Cinzel';
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .prog-age {
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .prog-desc {
+            font-size: 0.87rem;
+            color: rgba(232, 228, 216, 0.65);
+            line-height: 1.8;
+        }
+
+        .prog-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-decoration: none;
+            transition: gap 0.3s;
+        }
+
+        .prog-link:hover {
+            gap: 12px;
+        }
+
+        /* ── GALLERY ── */
+        #gallery {
+            background: var(--navy);
+            overflow: hidden;
+        }
+
+        .gallery-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-slider-wrap {
+            position: relative;
+        }
+
+        .gallery-slider {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            cursor: grab;
+            user-select: none;
+            padding-bottom: 1rem;
+        }
+
+        .gallery-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-slide {
+            flex: 0 0 calc(33.333% - 1rem);
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s;
+            filter: brightness(0.75) saturate(0.9);
+        }
+
+        .gallery-slide:hover img {
+            transform: scale(1.07);
+            filter: brightness(0.9) saturate(1.1);
+        }
+
+        .gallery-slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(6, 11, 22, 0.9));
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(40px);
+            opacity: 0;
+            transition: all 0.4s;
+        }
+
+        .gallery-slide:hover .gallery-slide-caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-slide-caption h4 {
+            font-family: 'Cormorant Garamond';
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .gallery-slide-caption p {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+
+        .slider-nav {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+        }
+
+        .slider-btn {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--gold);
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.3s;
+            display: grid;
+            place-items: center;
+        }
+
+        .slider-btn:hover {
+            background: var(--gold);
+            color: var(--deep);
+            border-color: var(--gold);
+        }
+
+        /* ── EVENTS ── */
+        #events {
+            background: var(--deep);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .event-item {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            transition: background 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gold);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+            transform-origin: top;
+        }
+
+        .event-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .event-item:hover {
+            padding-left: 1.5rem;
+        }
+
+        .event-date {
+            flex: 0 0 70px;
+            text-align: center;
+            background: rgba(201, 168, 76, 0.08);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 0.5rem;
+            border-radius: 2px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .event-item:hover .event-date {
+            background: rgba(201, 168, 76, 0.15);
+            border-color: var(--gold);
+        }
+
+        .event-date .day {
+            font-family: 'Cormorant Garamond';
+            font-size: 2rem;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .event-date .month {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .event-info h4 {
+            font-family: 'Cormorant Garamond';
+            font-size: 1.25rem;
+            color: var(--cream);
+        }
+
+        .event-info p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-top: 0.4rem;
+            line-height: 1.6;
+        }
+
+        .event-info .tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-top: 0.75rem;
+        }
+
+        .events-featured {
+            position: relative;
+        }
+
+        .events-featured img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2px;
+            filter: brightness(0.6);
+        }
+
+        .events-featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(6, 11, 22, 0.95));
+            padding: 3rem 2rem 2rem;
+        }
+
+        .events-featured-overlay .tag {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .events-featured-overlay h3 {
+            font-family: 'Cormorant Garamond';
+            font-size: 2rem;
+            color: #fff;
+            margin-top: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .events-featured-overlay p {
+            font-size: 0.85rem;
+            color: rgba(232, 228, 216, 0.7);
+            margin-top: 0.75rem;
+            line-height: 1.7;
+        }
+
+        /* ── TESTIMONIALS ── */
+        #testimonials {
+            background: var(--navy);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .testi-wrap {
+            max-width: 800px;
+            margin: 4rem auto 0;
+        }
+
+        .testi-slider {
+            position: relative;
+        }
+
+        .testi-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .testi-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .testi-quote {
+            font-family: 'Cormorant Garamond';
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--cream);
+        }
+
+        .testi-author {
+            margin-top: 2rem;
+        }
+
+        .testi-author img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            margin-inline: auto;
+        }
+
+        .testi-author .name {
+            font-family: 'Cinzel';
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            margin-top: 0.75rem;
+        }
+
+        .testi-author .role {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+
+        .testi-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 3rem;
+        }
+
+        .testi-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--muted);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .testi-dot.active {
+            background: var(--gold);
+            transform: scale(1.5);
+        }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--deep);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            margin-top: 4rem;
+        }
+
+        .contact-info {}
+
+        .contact-info p {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-top: 1rem;
+        }
+
+        .contact-items {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border: 1px solid var(--glass-border);
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            border-radius: 2px;
+            background: var(--glass);
+        }
+
+        .contact-item h5 {
+            font-family: 'Cinzel';
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .contact-item p {
+            font-size: 0.87rem;
+            color: rgba(232, 228, 216, 0.65);
+            line-height: 1.6;
+        }
+
+        .map-container {
+            margin-top: 2rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 280px;
+            filter: brightness(0.7) saturate(0.5) invert(0.9);
+            display: block;
+        }
+
+        .contact-form {}
+
+        .form-title {
+            font-family: 'Cormorant Garamond';
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            color: var(--cream);
+            padding: 14px 16px;
+            border-radius: 2px;
+            font-family: 'Outfit';
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold);
+            background: rgba(201, 168, 76, 0.04);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .form-group select option {
+            background: var(--navy);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--deep);
+            border: none;
+            border-radius: 2px;
+            font-family: 'Outfit';
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(201, 168, 76, 0.4);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: rgba(201, 168, 76, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+        }
+
+        .form-success .check {
+            font-size: 3rem;
+        }
+
+        .form-success h3 {
+            font-family: 'Cormorant Garamond';
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-top: 1rem;
+        }
+
+        .form-success p {
+            color: var(--muted);
+            margin-top: 0.5rem;
+        }
+
+        /* ── FACULTY ── */
+        #faculty {
+            background: var(--navy);
+        }
+
+        .faculty-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .faculty-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .faculty-card img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            filter: brightness(0.7) grayscale(30%);
+            transition: all 0.5s;
+        }
+
+        .faculty-card:hover img {
+            filter: brightness(0.5) grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .faculty-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(6, 11, 22, 0.95));
+            padding: 3rem 1.5rem 1.5rem;
+            transform: translateY(30px);
+            transition: transform 0.4s;
+        }
+
+        .faculty-card:hover .faculty-info {
+            transform: translateY(0);
+        }
+
+        .faculty-info h4 {
+            font-family: 'Cormorant Garamond';
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .faculty-info p {
+            font-size: 0.75rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+
+        .faculty-info .social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.4s 0.1s;
+        }
+
+        .faculty-card:hover .social {
+            opacity: 1;
+        }
+
+        .social a {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 0.8rem;
+            color: #fff;
+            text-decoration: none;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .social a:hover {
+            border-color: var(--gold);
+            background: rgba(201, 168, 76, 0.2);
+        }
+
+        /* ── ADMISSIONS ── */
+        #admissions {
+            background: var(--deep);
+        }
+
+        .admissions-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .admissions-img {
+            position: relative;
+        }
+
+        .admissions-img img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .admissions-img::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            right: -2rem;
+            bottom: -2rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            z-index: -1;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            flex: 0 0 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--gold);
+            font-family: 'Cormorant Garamond';
+            font-size: 1.3rem;
+            color: var(--gold);
+            border-radius: 2px;
+            background: rgba(201, 168, 76, 0.05);
+        }
+
+        .step h4 {
+            font-family: 'Cinzel';
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            color: var(--cream);
+            margin-bottom: 0.4rem;
+        }
+
+        .step p {
+            font-size: 0.84rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--deep);
+            border-top: 1px solid var(--glass-border);
+            padding: 5rem 5vw 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel';
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo .crest {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid var(--gold);
+            display: grid;
+            place-items: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(201, 168, 76, 0.1);
+        }
+
+        .footer-desc {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-social a {
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--glass-border);
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .footer-social a:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .footer-col h5 {
+            font-family: 'Cinzel';
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-col ul a {
+            font-size: 0.84rem;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul a:hover {
+            color: var(--gold-light);
+        }
+
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* ── PARALLAX DIVIDER ── */
+        .parallax-divider {
+            height: 350px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parallax-divider img {
+            position: absolute;
+            inset: -20%;
+            width: calc(100% + 20%);
+            height: calc(100% + 40%);
+            object-fit: cover;
+            filter: brightness(0.3) saturate(0.5);
+            will-change: transform;
+        }
+
+        .parallax-divider-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 2;
+            background: rgba(6, 11, 22, 0.4);
+        }
+
+        .parallax-divider-content h2 {
+            font-family: 'Cormorant Garamond';
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300;
+            color: #fff;
+        }
+
+        .parallax-divider-content p {
+            color: rgba(232, 228, 216, 0.6);
+            margin-top: 0.75rem;
+            font-size: 1rem;
+        }
+
+        /* ── NUMBERS SECTION ── */
+        #numbers {
+            background: var(--navy);
+        }
+
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            border: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        .number-item {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-right: 1px solid var(--glass-border);
+            transition: background 0.3s;
+        }
+
+        .number-item:last-child {
+            border-right: none;
+        }
+
+        .number-item:hover {
+            background: rgba(201, 168, 76, 0.04);
+        }
+
+        .number-item .count {
+            font-family: 'Cormorant Garamond';
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            color: var(--gold);
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .number-item .count sup {
+            font-size: 0.5em;
+            vertical-align: super;
+        }
+
+        .number-item .desc {
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 0.75rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width:1024px) {
+
+            .about-grid,
+            .contact-grid,
+            .admissions-wrap,
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faculty-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .programs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .about-img-badge {
+                right: 1rem;
+                bottom: 1rem;
+            }
+
+            .hero-stats {
+                display: none;
+            }
+
+            .numbers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .number-item:nth-child(2) {
+                border-right: none;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .events-featured {
+                height: 350px;
+            }
+        }
+
+        @media (max-width:768px) {
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: rgba(6, 11, 22, 0.98);
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1.5rem;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            section {
+                padding: 5rem 1.5rem;
+            }
+
+            .gallery-slide {
+                flex: 0 0 85%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faculty-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-pillars {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .numbers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ── SCROLL PROGRESS ── */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            z-index: 2000;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transition: width 0.1s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <div id="progress"></div>
+
+    <!-- NAV -->
+    <nav id="navbar">
+        <a href="#hero" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="school_about.html" class="page-link">About</a></li>
+            <li><a href="school_academics.html" class="page-link">Programs</a></li>
+            <li><a href="school_faculty.html" class="page-link">Faculty</a></li>
+            <li><a href="school_staff.html" class="page-link">Management Committee</a></li>
+            <li><a href="school_gallery.html" class="page-link">Gallery</a></li>
+            <li><a href="school_events.html" class="page-link">Events</a></li>
+            <li><a href="school_admissions.html" class="page-link">Admissions</a></li>
+            <li><a href="school_contact.html" class="page-link nav-cta">Enquire Now</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger" onclick="toggleNav()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <img src="aetheria_school_logo.png" alt="Aetheria Logo" class="hero-logo-img">
+            <div class="hero-label">Excellence Since 1998</div>
+            <h1 class="hero-title">Where <em>Excellence</em><br>Meets Inspiration</h1>
+            <p class="hero-subtitle">Shaping tomorrow's leaders through holistic education, world-class faculty, and a
+                tradition of academic distinction that spans three decades.</p>
+            <div class="hero-btns">
+                <a href="#admissions" class="btn-primary">Apply for Admissions</a>
+                <a href="#about" class="btn-ghost">Discover Our Story</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-line"></div>
+            Scroll
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="num">98%</div>
+                <div class="label">Pass Rate</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num">1:18</div>
+                <div class="label">Teacher Ratio</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num">45+</div>
+                <div class="label">Clubs & Activities</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-bar">
+        <div class="marquee-track">
+            <span>Academic Excellence</span><span class="marquee-dot">◆</span>
+            <span>Holistic Development</span><span class="marquee-dot">◆</span>
+            <span>CBSE Affiliated</span><span class="marquee-dot">◆</span>
+            <span>State Award Winner 2024</span><span class="marquee-dot">◆</span>
+            <span>World-Class Facilities</span><span class="marquee-dot">◆</span>
+            <span>Global Exchange Programs</span><span class="marquee-dot">◆</span>
+            <span>Smart Classrooms</span><span class="marquee-dot">◆</span>
+            <span>Eco Campus</span><span class="marquee-dot">◆</span>
+            <span>Academic Excellence</span><span class="marquee-dot">◆</span>
+            <span>Holistic Development</span><span class="marquee-dot">◆</span>
+            <span>CBSE Affiliated</span><span class="marquee-dot">◆</span>
+            <span>State Award Winner 2024</span><span class="marquee-dot">◆</span>
+            <span>World-Class Facilities</span><span class="marquee-dot">◆</span>
+            <span>Global Exchange Programs</span><span class="marquee-dot">◆</span>
+            <span>Smart Classrooms</span><span class="marquee-dot">◆</span>
+            <span>Eco Campus</span><span class="marquee-dot">◆</span>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="about-grid">
+            <div class="about-img-wrap reveal-left">
+                <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80" alt="School Campus">
+                <div class="about-img-badge">
+                    <div class="big">25+</div>
+                    <div class="small">Years of Legacy</div>
+                </div>
+            </div>
+            <div class="about-text reveal-right">
+                <div class="section-tag">Our Legacy</div>
+                <h2 class="section-title">A Tradition of<br><em>Shaping Futures</em></h2>
+                <p>Aetheria International School has been at the forefront of progressive education since 1998. We
+                    believe every child carries within them a spark of genius waiting to be ignited by the right
+                    environment, mentors, and opportunities.</p>
+                <p>Our CBSE-affiliated institution seamlessly blends rigorous academics with arts, sports, and life
+                    skills — producing graduates who lead with confidence, curiosity, and character.</p>
+                <div class="about-pillars">
+                    <div class="pillar reveal glass-premium">
+                        <div class="pillar-icon">🎓</div>
+                        <h4>Academic Rigor</h4>
+                        <p>CBSE curriculum enhanced with international pedagogies and critical thinking frameworks.</p>
+                    </div>
+                    <div class="pillar reveal glass-premium">
+                        <div class="pillar-icon">⚽</div>
+                        <h4>Sports & Arts</h4>
+                        <p>Olympic-standard courts, music studios, and a thriving performing arts program.</p>
+                    </div>
+                    <div class="pillar reveal glass-premium">
+                        <div class="pillar-icon">🌍</div>
+                        <h4>Global Outlook</h4>
+                        <p>Exchange programs, MUN conferences, and international partnerships.</p>
+                    </div>
+                    <div class="pillar reveal glass-premium">
+                        <div class="pillar-icon">💡</div>
+                        <h4>Innovation Hub</h4>
+                        <p>Dedicated STEM labs, robotics arena, and AI/coding curriculum from Grade 4.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUMBERS -->
+    <section id="numbers">
+        <div class="reveal" style="text-align:center">
+            <div class="section-tag" style="justify-content:center">By The Numbers</div>
+            <h2 class="section-title">Our <em>Impact</em> in Figures</h2>
+        </div>
+        <div class="numbers-grid">
+            <div class="number-item reveal">
+                <div class="count" data-target="3200">0</div>
+                <div class="desc">Students Enrolled</div>
+            </div>
+            <div class="number-item reveal">
+                <div class="count" data-target="180">0</div>
+                <div class="desc">Expert Faculty</div>
+            </div>
+            <div class="number-item reveal">
+                <div class="count" data-target="98">0<sup>%</sup></div>
+                <div class="desc">Board Pass Rate</div>
+            </div>
+            <div class="number-item reveal">
+                <div class="count" data-target="45">0<sup>+</sup></div>
+                <div class="desc">Co-curricular Clubs</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAMS -->
+    <section id="programs">
+        <div class="programs-intro reveal">
+            <div class="section-tag">Academic Programs</div>
+            <h2 class="section-title">Curriculum <em>Pathways</em></h2>
+            <p>From foundational years to senior secondary, every stage is crafted with intentional pedagogy and deeply
+                nurturing environments.</p>
+        </div>
+        <div class="programs-grid">
+            <div class="program-card reveal">
+                <div class="prog-num">01</div>
+                <div class="prog-icon">🌱</div>
+                <div class="prog-title">Early Childhood</div>
+                <div class="prog-age">Ages 3–5 · Nursery to KG</div>
+                <p class="prog-desc">Play-based learning rooted in Montessori principles. Sensory exploration, language
+                    development, and social-emotional foundations in a warm, joyful environment.</p>
+                <a href="#admissions" class="prog-link">Learn More →</a>
+            </div>
+            <div class="program-card reveal">
+                <div class="prog-num">02</div>
+                <div class="prog-icon">📚</div>
+                <div class="prog-title">Primary School</div>
+                <div class="prog-age">Ages 6–10 · Grades 1–5</div>
+                <p class="prog-desc">Core academics blended with creative arts, physical education, and STEM projects.
+                    Building confident learners who love to ask "why."</p>
+                <a href="#admissions" class="prog-link">Learn More →</a>
+            </div>
+            <div class="program-card reveal">
+                <div class="prog-num">03</div>
+                <div class="prog-icon">🔬</div>
+                <div class="prog-title">Middle School</div>
+                <div class="prog-age">Ages 11–13 · Grades 6–8</div>
+                <p class="prog-desc">Deep-dive into sciences, humanities, and technology. Robotics, debate, and cultural
+                    immersion programs ignite passions and build identity.</p>
+                <a href="#admissions" class="prog-link">Learn More →</a>
+            </div>
+            <div class="program-card reveal">
+                <div class="prog-num">04</div>
+                <div class="prog-icon">🏆</div>
+                <div class="prog-title">Secondary School</div>
+                <div class="prog-age">Ages 14–15 · Grades 9–10</div>
+                <p class="prog-desc">CBSE Class X preparation with additional skill electives in coding,
+                    entrepreneurship, and performing arts. Record board results year after year.</p>
+                <a href="#admissions" class="prog-link">Learn More →</a>
+            </div>
+            <div class="program-card reveal">
+                <div class="prog-num">05</div>
+                <div class="prog-icon">🎯</div>
+                <div class="prog-title">Senior Secondary</div>
+                <div class="prog-age">Ages 16–17 · Grades 11–12</div>
+                <p class="prog-desc">Science, Commerce & Humanities streams with JEE/NEET/CLAT coaching integration.
+                    University counselling for top institutions worldwide.</p>
+                <a href="#admissions" class="prog-link">Learn More →</a>
+            </div>
+            <div class="program-card reveal">
+                <div class="prog-num">06</div>
+                <div class="prog-icon">🌐</div>
+                <div class="prog-title">Special Programs</div>
+                <div class="prog-age">All Grades · Year-Round</div>
+                <p class="prog-desc">Summer academies, exchange programs, leadership camps, and gifted education
+                    initiatives for students ready to push beyond the curriculum.</p>
+                <a href="#admissions" class="prog-link">Learn More →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FACULTY -->
+    <section id="faculty">
+        <div class="reveal" style="text-align:center; max-width:600px; margin-inline:auto; margin-bottom:0">
+            <div class="section-tag" style="justify-content:center">Our Educators</div>
+            <h2 class="section-title">Faculty of <em>Distinction</em></h2>
+            <p style="color:var(--muted); margin-top:1rem; line-height:1.8; font-size:0.9rem;">Award-winning educators
+                with an average of 15+ years of teaching experience, many holding postgraduate degrees from premier
+                institutions.</p>
+        </div>
+        <div class="faculty-grid">
+            <div class="faculty-card reveal">
+                <img src="https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=500&q=80"
+                    alt="Dr. Priya Sharma">
+                <div class="faculty-info">
+                    <h4>Dr. Priya Sharma</h4>
+                    <p>Principal & Head of Academics</p>
+                    <div class="social">
+                        <a href="#">✉</a><a href="#">🔗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="faculty-card reveal">
+                <img src="https://images.unsplash.com/photo-1580894894513-541e068a3e2b?w=500&q=80"
+                    alt="Mr. Arjun Mehta">
+                <div class="faculty-info">
+                    <h4>Mr. Arjun Mehta</h4>
+                    <p>Head of Sciences</p>
+                    <div class="social"><a href="#">✉</a><a href="#">🔗</a></div>
+                </div>
+            </div>
+            <div class="faculty-card reveal">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500&q=80"
+                    alt="Ms. Anika Verma">
+                <div class="faculty-info">
+                    <h4>Ms. Anika Verma</h4>
+                    <p>Head of Humanities</p>
+                    <div class="social"><a href="#">✉</a><a href="#">🔗</a></div>
+                </div>
+            </div>
+            <div class="faculty-card reveal">
+                <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=500&q=80"
+                    alt="Mr. Ravi Kapoor">
+                <div class="faculty-info">
+                    <h4>Mr. Ravi Kapoor</h4>
+                    <p>Head of STEM & Innovation</p>
+                    <div class="social"><a href="#">✉</a><a href="#">🔗</a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div class="gallery-top">
+            <div>
+                <div class="section-tag reveal">Campus Life</div>
+                <h2 class="section-title reveal">Life at <em>Aetheria</em></h2>
+            </div>
+            <div class="slider-nav">
+                <button class="slider-btn" onclick="slideGallery(-1)">&#8592;</button>
+                <button class="slider-btn" onclick="slideGallery(1)">&#8594;</button>
+            </div>
+        </div>
+        <div class="gallery-slider-wrap reveal">
+            <div class="gallery-slider" id="gallerySlider">
+                <div class="gallery-slide">
+                    <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=900&q=80" alt="Library">
+                    <div class="gallery-slide-caption">
+                        <h4>World-Class Library</h4>
+                        <p>80,000+ books & digital resources</p>
+                    </div>
+                </div>
+                <div class="gallery-slide">
+                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=900&q=80" alt="Sports">
+                    <div class="gallery-slide-caption">
+                        <h4>Sports Complex</h4>
+                        <p>Olympic-grade courts & swimming pool</p>
+                    </div>
+                </div>
+                <div class="gallery-slide">
+                    <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=900&q=80" alt="Lab">
+                    <div class="gallery-slide-caption">
+                        <h4>Science Laboratories</h4>
+                        <p>State-of-the-art equipment</p>
+                    </div>
+                </div>
+                <div class="gallery-slide">
+                    <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=900&q=80" alt="Arts">
+                    <div class="gallery-slide-caption">
+                        <h4>Performing Arts Studio</h4>
+                        <p>Theatre, music & dance</p>
+                    </div>
+                </div>
+                <div class="gallery-slide">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80" alt="Classroom">
+                    <div class="gallery-slide-caption">
+                        <h4>Smart Classrooms</h4>
+                        <p>Interactive learning environments</p>
+                    </div>
+                </div>
+                <div class="gallery-slide">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=900&q=80" alt="Events">
+                    <div class="gallery-slide-caption">
+                        <h4>Annual Celebrations</h4>
+                        <p>A vibrant campus culture</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARALLAX DIVIDER -->
+    <div class="parallax-divider" id="parallaxDiv">
+        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=1800&q=80" id="parallaxImg" alt="">
+        <div class="parallax-divider-content">
+            <h2>"The function of education is to teach one to <em style="color:var(--gold-light)">think intensively</em>
+                and to think critically."</h2>
+            <p>— Martin Luther King Jr.</p>
+        </div>
+    </div>
+
+    <!-- EVENTS -->
+    <section id="events">
+        <div class="section-tag reveal">School Calendar</div>
+        <h2 class="section-title reveal">Upcoming <em>Events</em></h2>
+        <div class="events-grid">
+            <div class="events-list">
+                <div class="event-item reveal">
+                    <div class="event-date">
+                        <div class="day">12</div>
+                        <div class="month">May</div>
+                    </div>
+                    <div class="event-info">
+                        <h4>Annual Science Olympiad 2025</h4>
+                        <p>Inter-school competition featuring robotics, physics experiments, and biology challenges.
+                            Open to Grades 6–12.</p>
+                        <span class="tag">Academic</span>
+                    </div>
+                </div>
+                <div class="event-item reveal">
+                    <div class="event-date">
+                        <div class="day">22</div>
+                        <div class="month">May</div>
+                    </div>
+                    <div class="event-info">
+                        <h4>International Cultural Festival</h4>
+                        <p>A vibrant celebration of global cultures with performances, food stalls, and traditional art
+                            exhibits.</p>
+                        <span class="tag">Cultural</span>
+                    </div>
+                </div>
+                <div class="event-item reveal">
+                    <div class="event-date">
+                        <div class="day">03</div>
+                        <div class="month">Jun</div>
+                    </div>
+                    <div class="event-info">
+                        <h4>Parent-Teacher Open Day</h4>
+                        <p>An opportunity for parents to engage with faculty, review academic progress, and tour updated
+                            facilities.</p>
+                        <span class="tag">Community</span>
+                    </div>
+                </div>
+                <div class="event-item reveal">
+                    <div class="event-date">
+                        <div class="day">15</div>
+                        <div class="month">Jun</div>
+                    </div>
+                    <div class="event-info">
+                        <h4>Graduation Ceremony 2025</h4>
+                        <p>Celebrating our Class XII batch as they embark on their next chapter. Formal ceremony +
+                            dinner.</p>
+                        <span class="tag">Milestone</span>
+                    </div>
+                </div>
+                <div class="event-item reveal">
+                    <div class="event-date">
+                        <div class="day">01</div>
+                        <div class="month">Jul</div>
+                    </div>
+                    <div class="event-info">
+                        <h4>New Academic Year 2025–26</h4>
+                        <p>First day of the new term. Welcome assembly, orientation sessions, and activity club
+                            sign-ups.</p>
+                        <span class="tag">Academic</span>
+                    </div>
+                </div>
+            </div>
+            <div class="events-featured reveal-right">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80"
+                    alt="Featured Event">
+                <div class="events-featured-overlay">
+                    <div class="tag">Featured Event</div>
+                    <h3>Aetheria MUN Conference 2025</h3>
+                    <p>Our flagship Model United Nations brings together 500+ delegates from 30 schools across Punjab.
+                        Register your team before April 30.</p>
+                    <a href="#contact" class="btn-primary"
+                        style="display:inline-block;margin-top:1.25rem;font-size:0.8rem;padding:12px 28px;">Register
+                        Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="section-tag reveal" style="justify-content:center">Voices</div>
+        <h2 class="section-title reveal">What Our <em>Community</em> Says</h2>
+        <div class="testi-wrap">
+            <div class="testi-slider">
+                <div class="testi-slide active">
+                    <p class="testi-quote">"Aetheria didn't just educate my daughter — it transformed her into a
+                        confident, curious, and compassionate human being. The faculty genuinely care about every
+                        child."</p>
+                    <div class="testi-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Parent">
+                        <div class="name">Mrs. Kavita Rai</div>
+                        <div class="role">Parent · Grade 10 Student</div>
+                    </div>
+                </div>
+                <div class="testi-slide">
+                    <p class="testi-quote">"The STEM labs here are extraordinary. I built my first working robot in
+                        Grade 7 and won the state championship. This school pushes you to dream bigger than you think
+                        possible."</p>
+                    <div class="testi-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="Alumni">
+                        <div class="name">Aryan Singh</div>
+                        <div class="role">Alumni · Now at IIT Delhi</div>
+                    </div>
+                </div>
+                <div class="testi-slide">
+                    <p class="testi-quote">"Teaching here feels like being part of something exceptional. The school's
+                        commitment to innovation keeps us growing as educators every single day."</p>
+                    <div class="testi-author">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&q=80"
+                            alt="Faculty">
+                        <div class="name">Ms. Deepa Khanna</div>
+                        <div class="role">Faculty · Department of Mathematics</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-dots" id="testiDots">
+                <div class="testi-dot active" onclick="goToTesti(0)"></div>
+                <div class="testi-dot" onclick="goToTesti(1)"></div>
+                <div class="testi-dot" onclick="goToTesti(2)"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADMISSIONS -->
+    <section id="admissions">
+        <div class="admissions-wrap">
+            <div class="admissions-img reveal-left">
+                <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&q=80" alt="Admissions">
+            </div>
+            <div class="reveal-right">
+                <div class="section-tag">Join Our Family</div>
+                <h2 class="section-title">How to <em>Apply</em></h2>
+                <p style="color:var(--muted); line-height:1.8; margin-top:1rem;">Applications for the 2025–26 academic
+                    year are now open. Our admissions process is transparent, merit-based, and designed to identify
+                    potential — not just performance.</p>
+                <div class="steps">
+                    <div class="step reveal">
+                        <div class="step-num">01</div>
+                        <div>
+                            <h4>Submit Inquiry Form</h4>
+                            <p>Fill our online form or visit the admissions office. Receive a registration kit within 48
+                                hours.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal">
+                        <div class="step-num">02</div>
+                        <div>
+                            <h4>Campus Visit & Interaction</h4>
+                            <p>Schedule a school tour. Students and parents meet with our academic counsellors.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal">
+                        <div class="step-num">03</div>
+                        <div>
+                            <h4>Assessment & Interview</h4>
+                            <p>Grade-appropriate assessment. Friendly, informal — designed to reveal strengths, not rank
+                                students.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal">
+                        <div class="step-num">04</div>
+                        <div>
+                            <h4>Offer & Enrolment</h4>
+                            <p>Receive your offer letter and complete enrolment with our dedicated admissions
+                                coordinator.</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="#contact" class="btn-primary" style="display:inline-block;margin-top:2.5rem;">Begin Your
+                    Application</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="section-tag reveal">Get In Touch</div>
+        <h2 class="section-title reveal">We'd Love to <em>Hear</em> From You</h2>
+        <div class="contact-grid">
+            <div class="contact-info reveal-left">
+                <p>Whether you're exploring admissions, planning a campus visit, or have a general inquiry — our team is
+                    here to help. Reach out and we'll respond within one business day.</p>
+                <div class="contact-items">
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <h5>Campus Address</h5>
+                            <p>Aetheria International School<br>Sector 45, Chandigarh Road<br>Ludhiana, Punjab – 141001
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div>
+                            <h5>Phone & WhatsApp</h5>
+                            <p>+91 98765 43210<br>+91 98765 43211 (Admissions Direct)</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">✉</div>
+                        <div>
+                            <h5>Email</h5>
+                            <p>admissions@aetheriaschool.edu.in<br>info@aetheriaschool.edu.in</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🕐</div>
+                        <div>
+                            <h5>Office Hours</h5>
+                            <p>Monday–Saturday: 8:00 AM – 4:30 PM<br>Sunday: Closed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d109737.75470053804!2d75.77102899999999!3d30.9009977!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a837462345c71%3A0x4d2f5b68afe79a59!2sLudhiana%2C%20Punjab!5e0!3m2!1sen!2sin!4v1711454000000!5m2!1sen!2sin"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+            <div class="contact-form reveal-right">
+                <div class="form-title">Send Us an Inquiry</div>
+                <div id="inquiryForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Parent's Name *</label>
+                            <input type="text" id="parentName" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Student's Name *</label>
+                            <input type="text" id="studentName" placeholder="Child's name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Applying for Grade</label>
+                            <select id="grade">
+                                <option value="">Select Grade</option>
+                                <option>Nursery / KG</option>
+                                <option>Grade 1–5 (Primary)</option>
+                                <option>Grade 6–8 (Middle)</option>
+                                <option>Grade 9–10 (Secondary)</option>
+                                <option>Grade 11–12 (Senior)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Academic Year</label>
+                            <select id="year">
+                                <option value="">Select Year</option>
+                                <option>2025–2026</option>
+                                <option>2026–2027</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Message / Inquiry</label>
+                        <textarea id="message"
+                            placeholder="Tell us about your child, any specific queries, or preferred visit dates..."></textarea>
+                    </div>
+                    <button class="form-submit" onclick="submitForm()">Submit Inquiry →</button>
+                </div>
+                <div class="form-success" id="formSuccess">
+                    <div class="check">✅</div>
+                    <h3>Inquiry Received!</h3>
+                    <p>Thank you for reaching out. Our admissions team will contact you within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo"><span class="crest">A</span>Aetheria International School</div>
+                <p class="footer-desc">Empowering young minds with the knowledge, values, and skills to lead purposeful
+                    lives in a complex, interconnected world.</p>
+                <div class="footer-social">
+                    <a href="#">📘</a>
+                    <a href="#">📸</a>
+                    <a href="#">🐦</a>
+                    <a href="#">▶</a>
+                    <a href="#">💼</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h5>Quick Links</h5>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#programs">Programs</a></li>
+                    <li><a href="#faculty">Faculty</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#admissions">Admissions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Academics</h5>
+                <ul>
+                    <li><a href="#">Curriculum Overview</a></li>
+                    <li><a href="#">CBSE Affiliation</a></li>
+                    <li><a href="#">Examination Policy</a></li>
+                    <li><a href="#">Academic Calendar</a></li>
+                    <li><a href="#">Library & Resources</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Support</h5>
+                <ul>
+                    <li><a href="#">Fee Structure</a></li>
+                    <li><a href="#">Scholarship Program</a></li>
+                    <li><a href="#">Transport Routes</a></li>
+                    <li><a href="#">School Policy</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Aetheria International School. All Rights Reserved.</p>
+            <p>Designed with ❤ for Academic Excellence</p>
+        </div>
+    </footer>
+
+    <script>
+        // ── Page Transitions
+        window.addEventListener('load', () => {
+            document.body.classList.add('page-loaded');
+        });
+
+        document.querySelectorAll('.page-link, .nav-logo, .nav-cta').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.getAttribute('href').startsWith('#')) return;
+                e.preventDefault();
+                const target = link.getAttribute('href');
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    window.location.href = target;
+                }, 800);
+            });
+        });
+
+        // ── Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+        (function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px'; requestAnimationFrame(animRing); })();
+
+        // ── Scroll Progress
+        const prog = document.getElementById('progress');
+        window.addEventListener('scroll', () => {
+            const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            prog.style.width = pct + '%';
+            // Nav shrink
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+            // Parallax
+            const pDiv = document.getElementById('parallaxDiv');
+            const pImg = document.getElementById('parallaxImg');
+            if (pImg) { const rect = pDiv.getBoundingClientRect(); const offset = rect.top / window.innerHeight; pImg.style.transform = `translateY(${offset * 60}px)`; }
+            // Reveal
+            document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add('visible');
+            });
+            // Count up
+            countUpInit();
+        });
+
+        // ── Reveal on load
+        setTimeout(() => document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight * 0.9) el.classList.add('visible'); }), 200);
+
+        // ── Count Up
+        let counted = false;
+        function countUpInit() {
+            if (counted) return;
+            const els = document.querySelectorAll('[data-target]');
+            els.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight * 0.9) { counted = true; countAll(); } });
+        }
+        function countAll() {
+            document.querySelectorAll('[data-target]').forEach(el => {
+                const target = +el.getAttribute('data-target');
+                const suffix = el.querySelector('sup') ? el.querySelector('sup').outerHTML : '';
+                const dur = 2000; const steps = 80; const inc = target / steps;
+                let cur = 0;
+                const timer = setInterval(() => {
+                    cur = Math.min(cur + inc, target);
+                    el.innerHTML = Math.floor(cur) + suffix;
+                    if (cur >= target) clearInterval(timer);
+                }, dur / steps);
+            });
+        }
+
+        // ── Gallery Slider
+        const slider = document.getElementById('gallerySlider');
+        let isDragging = false, startX, scrollLeft;
+        if (slider) {
+            slider.addEventListener('mousedown', e => { isDragging = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; slider.style.cursor = 'grabbing'; });
+            slider.addEventListener('mouseleave', () => { isDragging = false; slider.style.cursor = 'grab'; });
+            slider.addEventListener('mouseup', () => { isDragging = false; slider.style.cursor = 'grab'; });
+            slider.addEventListener('mousemove', e => { if (!isDragging) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
+        }
+        function slideGallery(dir) { const w = slider.querySelector('.gallery-slide').offsetWidth + 24; slider.scrollBy({ left: dir * (w * 2), behavior: 'smooth' }); }
+
+        // ── Testimonials
+        let testiIdx = 0;
+        const slides = document.querySelectorAll('.testi-slide');
+        const dots = document.querySelectorAll('.testi-dot');
+        function goToTesti(i) { if (slides[testiIdx]) { slides[testiIdx].classList.remove('active'); dots[testiIdx].classList.remove('active'); testiIdx = i; slides[testiIdx].classList.add('active'); dots[testiIdx].classList.add('active'); } }
+        if (slides.length > 0) setInterval(() => goToTesti((testiIdx + 1) % slides.length), 5000);
+
+        // ── Nav toggle
+        function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+        // ── Form Submit
+        function submitForm() {
+            const p = document.getElementById('parentName').value;
+            const e = document.getElementById('email').value;
+            if (!p || !e) { alert('Please fill in required fields.'); return; }
+            document.getElementById('inquiryForm').style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+        }
+
+        // ── Hero parallax
+        window.addEventListener('scroll', () => {
+            const s = window.scrollY;
+            const heroBg = document.querySelector('.hero-bg');
+            if (heroBg) heroBg.style.transform = `scale(1.08) translateY(${s * 0.3}px)`;
+        });
+    </script>
+</body>
+
+</html>

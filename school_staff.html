@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria — Leadership & Governance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <style>
+        :root {
+            --navy: #0a0f1e;
+            --deep: #060b16;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --text: #e8e4d8;
+            --glass-ios: rgba(255, 255, 255, 0.015);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── Ambient Background ── */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: #060b16;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.12;
+            animation: float 25s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 800px;
+            height: 800px;
+            background: var(--gold);
+            top: -300px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: #4a6fa5;
+            bottom: -200px;
+            left: -200px;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(-100px, 100px) scale(1.1);
+            }
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: rgba(6, 11, 22, 0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .container {
+            padding: 140px 5vw 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo-img-header {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.3));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+        }
+
+        .header h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-top: 10px;
+        }
+
+        /* ── Committee Table ── */
+        .committee-wrap {
+            background: var(--glass-ios);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(201, 168, 76, 0.05);
+            color: var(--gold);
+            padding: 25px 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+            color: #fff;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--gold-light);
+            font-size: 1.1rem;
+            display: block;
+        }
+
+        .post-badge {
+            background: rgba(201, 168, 76, 0.1);
+            color: var(--gold);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── Reveal Animations ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            th,
+            td {
+                padding: 15px;
+                min-width: 200px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <nav>
+        <a href="school_basic.html" class="nav-logo">
+            <img src="aetheria_school_logo.png" alt="Logo"
+                style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
+            Aetheria International
+        </a>
+        <ul class="nav-links">
+            <li><a href="school_about.html">About</a></li>
+            <li><a href="school_academics.html">Programs</a></li>
+            <li><a href="school_faculty.html">Faculty</a></li>
+            <li><a href="school_staff.html" style="color: var(--gold);">Management Committee</a></li>
+            <li><a href="school_gallery.html">Gallery</a></li>
+            <li><a href="school_events.html">Events</a></li>
+            <li><a href="school_admissions.html">Admissions</a></li>
+            <li><a href="school_contact.html"
+                    style="color: var(--gold); border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
+                    Now</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="header reveal">
+            <img src="aetheria_school_logo.png" alt="Logo" class="logo-img-header">
+            <p>Governance & Leadership</p>
+            <h1>Managing <em>Committee</em></h1>
+        </div>
+
+        <div class="committee-wrap reveal">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Member Details</th>
+                        <th>Designation / Post</th>
+                        <th>Tenure</th>
+                        <th>Official Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="member-name">Dr. Alistair Sterling</span>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">Ph.D. in Educational Leadership</span>
+                        </td>
+                        <td><span class="post-badge">Chairman</span></td>
+                        <td>2022 — 2025</td>
+                        <td>Silver Oaks Estate, Kensington, UK</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="member-name">Mrs. Eleanor Vance</span>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">M.Phil, Former Dean of Academics</span>
+                        </td>
+                        <td><span class="post-badge">Secretary</span></td>
+                        <td>2023 — 2026</td>
+                        <td>Orchard Avenue, Block 4, Aetheria Heights</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="member-name">Mr. Julian Thorne</span>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">Chartered Accountant</span>
+                        </td>
+                        <td><span class="post-badge">Treasurer</span></td>
+                        <td>2022 — 2025</td>
+                        <td>Penthouse 12, Skyline Towers, City Central</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="member-name">Dr. Sofia Rossi</span>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">Nominee Member (Educationist)</span>
+                        </td>
+                        <td><span class="post-badge">Executive Member</span></td>
+                        <td>2024 — 2027</td>
+                        <td>Villa Rosa, Coastal Road, Sector 9</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="member-name">Capt. Rajesh Mehra</span>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">Retd. Army Officer (Parent Rep)</span>
+                        </td>
+                        <td><span class="post-badge">Member</span></td>
+                        <td>2023 — 2026</td>
+                        <td>A-45, Defense Colony, New Delhi, IN</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="member-name">Ms. Isabella Chen</span>
+                            <span style="font-size: 0.8rem; opacity: 0.6;">Tech Lead (Industry Rep)</span>
+                        </td>
+                        <td><span class="post-badge">Member</span></td>
+                        <td>2024 — 2027</td>
+                        <td>Innovation Hub, Cyber City, Singapore</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+
+</html>
