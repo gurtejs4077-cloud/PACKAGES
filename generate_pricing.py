@@ -75,7 +75,7 @@ template = r"""<!DOCTYPE html>
 <body>
 <div class="container">
     <header class="header">
-        <a href="gurtej_showcase_vertical.html" class="back-btn">← Back to Showcase</a>
+        <a href="index.html" class="back-btn">← Back to Showcase</a>
         <h1>Elevate Your Business</h1>
         <p>Premium web experiences tailored for __NICHE_NAME__.</p>
     </header>

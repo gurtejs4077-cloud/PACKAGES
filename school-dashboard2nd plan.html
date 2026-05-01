@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aetheria Elite — Executive Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Outfit:wght@100;200;300;400;500;600&family=Cinzel+Decorative:wght@400;700;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050505;
+      --surface: #0a0a0a;
+      --gold: #d4af37;
+      --gold-gradient: linear-gradient(135deg, #f9e29c 0%, #d4af37 50%, #926d15 100%);
+      --text: #f5f5f7;
+      --text-muted: #86868b;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 4px;
+      --sidebar-w: 260px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ─── SIDEBAR ─────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      padding: 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo img {
+      width: 45px;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-logo h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.9rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+    }
+
+    .sidebar-nav {
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    .nav-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: block;
+      opacity: 0.7;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.8rem 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: var(--text);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    .nav-item.active {
+      border-left: 2px solid var(--gold);
+    }
+
+    /* ─── MAIN CONTENT ────────────────── */
+    .main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 3rem 4rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4rem;
+    }
+
+    .top-bar h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--gold-gradient);
+      border-radius: 50%;
+    }
+
+    /* ─── DASHBOARD GRID ──────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      transition: 0.4s;
+    }
+
+    .stat-card:hover { border-color: var(--gold); }
+
+    .stat-card h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .stat-card .value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--gold);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 3rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .card-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 1.5rem 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .status {
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .status-active { color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+    .status-pending { color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+
+    @media (max-width: 1200px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="aetheria_school_logo.png" alt="Aetheria">
+      <h1>AETHERIA <span>ELITE</span></h1>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-label">Oversight</span>
+        <a href="#" class="nav-item active">Dashboard</a>
+        <a href="#" class="nav-item">Analytics</a>
+        <a href="#" class="nav-item">Estate Mgmt</a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">Admissions</span>
+        <a href="#" class="nav-item">Active Inquiries</a>
+        <a href="#" class="nav-item">Waitlist</a>
+        <a href="#" class="nav-item">Prospectus Sent</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="top-bar">
+      <h2>Executive <em>Overview</em></h2>
+      <div class="user-profile">
+        <div style="text-align: right;">
+          <p style="font-size: 0.8rem; font-weight: 500;">Lord Registrar</p>
+          <p style="font-size: 0.7rem; color: var(--text-muted);">Executive Admin</p>
+        </div>
+        <div class="avatar"></div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <h4>Total Scholars</h4>
+        <div class="value">1,248</div>
+      </div>
+      <div class="stat-card">
+        <h4>Pending Inquiries</h4>
+        <div class="value">84</div>
+      </div>
+      <div class="stat-card">
+        <h4>Estate Capacity</h4>
+        <div class="value">92%</div>
+      </div>
+      <div class="stat-card">
+        <h4>Global Mentors</h4>
+        <div class="value">156</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Recent Enrollment Inquiries</h3>
+        <a href="#" style="color:var(--gold); font-size:0.7rem; text-transform:uppercase; text-decoration:none; letter-spacing:0.1em;">View All</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Grade Level</th>
+            <th>Inquiry Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Master Julian Aether</td>
+            <td>Senior Secondary</td>
+            <td>24 Oct 2025</td>
+            <td><span class="status status-pending">Pending Review</span></td>
+          </tr>
+          <tr>
+            <td>Lady Seraphina Sterling</td>
+            <td>Foundation</td>
+            <td>23 Oct 2025</td>
+            <td><span class="status status-active">Approved</span></td>
+          </tr>
+          <tr>
+            <td>Master Victor Thorne</td>
+            <td>Intermediate</td>
+            <td>22 Oct 2025</td>
+            <td><span class="status status-active">Approved</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+
+</html>

@@ -11,6 +11,8 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
     <style>
         :root {
             --navy: #0a0f1e;
@@ -35,6 +37,61 @@
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
+            cursor: none;
+            opacity: 0;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.page-loaded {
+            opacity: 1;
+        }
+
+        /* ── Custom Cursor ── */
+        #cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(201, 168, 76, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease, width 0.3s, height 0.3s, opacity 0.3s;
+        }
+
+        body:has(a:hover, button:hover) #cursor {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+        }
+
+        body:has(a:hover, button:hover) #cursor-ring {
+            width: 50px;
+            height: 50px;
+            border-color: var(--gold);
+        }
+
+        /* ── Noise Overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
         }
 
         /* ── Ambient Background ── */
@@ -108,21 +165,38 @@
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 2.5rem;
             list-style: none;
         }
 
         .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.8rem;
+            font-family: 'Outfit';
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
         }
 
         .nav-links a:hover {
-            color: var(--gold);
+            color: var(--gold-light);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--gold);
+            display: block;
+            transition: all 0.3s;
         }
 
         .container {
@@ -225,43 +299,17 @@
         }
 
         /* ── Reveal Animations ── */
-        .reveal {
+        .whoa-reveal {
             opacity: 0;
             transform: translateY(40px);
             transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .reveal.visible {
+        .whoa-reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 3rem;
-            }
-
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            th,
-            td {
-                padding: 15px;
-                min-width: 200px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-        }
-    </style>
-
-    
-    
-
-    <style id="mobile-excellence-fix">
         @media (max-width: 768px) {
             nav { padding: 0 20px !important; height: 80px !important; justify-content: space-between !important; display: flex !important; align-items: center !important; }
             .logo, .nav-logo { font-size: 1.1rem !important; flex-grow: 1; }
@@ -285,24 +333,26 @@
             .nav-links.open { display: flex !important; }
             .hamburger { display: flex !important; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; order: 3; margin-left: 15px; }
             .hamburger span { width: 25px; height: 2px; background: #c9a84c; transition: 0.3s; }
-            nav .btn-gold, nav .btn-primary, nav .nav-cta, nav .nav-cta-mobile { display: none !important; }
-            h1 { font-size: clamp(2.2rem, 10vw, 3.5rem) !important; line-height: 1.2 !important; }
-            h2 { font-size: clamp(1.8rem, 8vw, 2.5rem) !important; }
-            .container { padding: 120px 20px 60px !important; grid-template-columns: 1fr !important; gap: 40px !important; }
-            .about-grid, .contact-grid, .expertise-grid, .pricing-grid, .academics-grid, .footer-grid, .numbers-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-            .hero-title { font-size: clamp(2.5rem, 12vw, 4rem) !important; }
-            .hero-content { padding: 0 20px !important; }
-            .sub-hero { height: 50vh !important; }
-            .hero-stats { display: none !important; }
-            .academic-card, .exp-card, .p-card, .niche-card { padding: 30px 20px !important; }
+            
+            .header h1 { font-size: 3rem; }
+            table { display: block; overflow-x: auto; }
+            th, td { padding: 15px; min-width: 200px; }
+            
             #cursor, #cursor-ring { display: none !important; }
             body { cursor: default !important; }
         }
     </style>
+
+    
+    
+
+
     
 </head>
 
 <body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
     <div class="ambient-bg">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -314,7 +364,7 @@
                 style="width: 40px; height: 40px; object-fit: contain; margin-right: 10px;">
             Aetheria International
         </a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="navLinks">
             <li><a href="school_about.html">About</a></li>
             <li><a href="school_academics.html">Programs</a></li>
             <li><a href="school_faculty.html">Faculty</a></li>
@@ -326,18 +376,18 @@
                     style="color: var(--gold); border: 1px solid var(--gold); padding: 8px 16px; border-radius: 50px;">Enquire
                     Now</a></li>
         </ul>
-        <div class="hamburger" id="hamburger" onclick="document.getElementById(\'navLinks\').classList.toggle(\'open\')"><span></span><span></span><span></span></div>
+        <div class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></div>
         
     </nav>
 
     <div class="container">
-        <div class="header reveal">
+        <div class="header whoa-reveal">
             <img src="aetheria_school_logo.png" alt="Logo" class="logo-img-header">
             <p>Governance & Leadership</p>
             <h1>Managing <em>Committee</em></h1>
         </div>
 
-        <div class="committee-wrap reveal">
+        <div class="committee-wrap whoa-reveal">
             <table>
                 <thead>
                     <tr>
@@ -409,12 +459,35 @@
 
     <script>
         window.addEventListener('load', () => {
+            document.body.classList.add('page-loaded');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
             }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            document.querySelectorAll('.whoa-reveal').forEach(el => observer.observe(el));
+        });
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        });
+
+        // Page Transitions
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.getAttribute('href').startsWith('#') || link.getAttribute('href').startsWith('tel:')) return;
+                e.preventDefault();
+                const target = link.getAttribute('href');
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'scale(0.98)';
+                setTimeout(() => { window.location.href = target; }, 800);
+            });
         });
     </script>
 </body>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheria Elite | The Pinnacle of Global Education</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Outfit:wght@100;200;300;400;500;600&family=Cinzel+Decorative:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --gold-gradient: linear-gradient(135deg, #f9e29c 0%, #d4af37 50%, #926d15 100%);
+            --text: #f5f5f7;
+            --text-muted: #86868b;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --ease: cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+        }
+
+        body {
+            background: transparent;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: none;
+            transition: opacity 0.8s var(--ease);
+        }
+
+        /* ── LUXURY BACKGROUND ── */
+        .fixed-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            background: linear-gradient(rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.85)), url('luxury_school_bg.png') center/cover no-repeat;
+            opacity: 1;
+        }
+
+        /* ── LUXURY EFFECTS ── */
+        .ambient-light {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+        }
+
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+
+        #cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s ease-out;
+            opacity: 0.5;
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            letter-spacing: 2px;
+        }
+
+        .logo img { width: 40px; height: 40px; }
+
+        nav ul { display: flex; gap: 3rem; list-style: none; }
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; transition: 0.4s; }
+        nav a:hover { color: var(--gold); }
+        .nav-cta { background: var(--gold-gradient); color: var(--bg) !important; padding: 12px 30px; font-weight: 600 !important; }
+
+        /* ── HERO ── */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(rgba(5,5,5,0.4), rgba(5,5,5,0.4)), url('luxury_school_bg.png') center/cover;
+            transform: scale(1.1);
+            animation: panHero 20s infinite alternate;
+        }
+
+        @keyframes panHero {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1000px;
+        }
+
+        .hero-content span {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8em;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .hero-content h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.8s;
+        }
+
+        .hero-content h1 em { font-style: italic; color: var(--gold); }
+
+        .hero-btns {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 1.2s;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+            transition: 0.4s;
+            border: 1px solid var(--gold);
+        }
+
+        .btn-gold { background: var(--gold-gradient); color: var(--bg); }
+        .btn-outline { color: var(--gold); }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--gold-glow); }
+
+        /* ── MARQUEE ── */
+        .marquee {
+            background: #000;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-track {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee span {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 0.7rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            margin-right: 4rem;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ── SECTIONS ── */
+        section { padding: 12rem 5vw; position: relative; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 8rem;
+        }
+
+        .section-header span {
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            font-size: 0.7rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 300;
+        }
+
+        /* ── PILLARS ── */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4rem;
+        }
+
+        .pillar-card {
+            background: var(--surface);
+            padding: 4rem 3rem;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: 0.5s;
+        }
+
+        .pillar-card:hover { border-color: var(--gold); transform: translateY(-10px); }
+
+        .pillar-card h3 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .pillar-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ── STATS ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            color: var(--gold);
+            font-weight: 300;
+        }
+
+        .stat-item p {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--text-muted);
+        }
+
+        /* ── PROGRAMS ── */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--glass-border);
+            border: 1px solid var(--glass-border);
+        }
+
+        .program-card {
+            background: var(--bg);
+            padding: 5rem 4rem;
+            transition: 0.4s;
+        }
+
+        .program-card:hover { background: rgba(212, 175, 55, 0.03); }
+
+        .program-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .program-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+        /* ── TESTIMONIALS ── */
+        .testi-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testi-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.5;
+            margin-bottom: 3rem;
+        }
+
+        .testi-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .testi-author img { width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--gold); }
+
+        .testi-author div { text-align: left; }
+        .testi-author h5 { color: var(--gold); font-size: 0.9rem; letter-spacing: 1px; }
+        .testi-author p { color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; }
+
+        /* ── FOOTER ── */
+        footer { padding: 8rem 5vw 4rem; background: #000; text-align: center; border-top: 1px solid var(--glass-border); }
+        .footer-logo { font-family: 'Cinzel Decorative', cursive; font-size: 2.5rem; color: var(--gold); margin-bottom: 3rem; display: block; text-decoration: none; }
+        .footer-links { display: flex; justify-content: center; gap: 4rem; margin-bottom: 4rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; transition: 0.3s; }
+        .footer-links a:hover { color: var(--gold); }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .pillars-grid, .stats-grid, .programs-grid { grid-template-columns: 1fr; }
+            .hero-content h1 { font-size: 4rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-bg"></div>
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+    <div class="ambient-light"></div>
+    <div class="grain-overlay"></div>
+
+    <header>
+        <a href="school-home2nd%20plan.html" class="logo">
+            <img src="aetheria_school_logo.png" alt="Aetheria">
+            AETHERIA <span>ELITE</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="school-about2nd%20plan.html">The Legacy</a></li>
+                <li><a href="school-academics2nd%20plan.html">Curriculum</a></li>
+                <li><a href="school-facilities2nd%20plan.html">Discover</a></li>
+                <li><a href="school-faculty2nd%20plan.html">Mentors</a></li>
+                <li><a href="school-gallery2nd%20plan.html">The Estate</a></li>
+                <li><a href="school-admission2nd%20plan.html">Enrollment</a></li>
+                <li><a href="school-contact2nd%20plan.html" class="nav-cta">Inquiry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <span>ESTABLISHED MCMXCV</span>
+                <h1>Crafting the <em>Future</em> Leaders of the World</h1>
+                <div class="hero-btns">
+                    <a href="school-admission2nd%20plan.html" class="btn btn-gold">Begin Journey</a>
+                    <a href="school-about2nd%20plan.html" class="btn btn-outline">Our Heritage</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="marquee">
+            <div class="marquee-track">
+                <span>✧ ADMISSIONS OPEN FOR 2025-26</span>
+                <span>✧ GLOBAL ACADEMIC EXCELLENCE AWARD 2024</span>
+                <span>✧ NEW QUANTUM INNOVATION LAB OPENED</span>
+                <span>✧ 100% IVY LEAGUE PLACEMENTS</span>
+                <span>✧ ADMISSIONS OPEN FOR 2025-26</span>
+                <span>✧ GLOBAL ACADEMIC EXCELLENCE AWARD 2024</span>
+                <span>✧ NEW QUANTUM INNOVATION LAB OPENED</span>
+                <span>✧ 100% IVY LEAGUE PLACEMENTS</span>
+            </div>
+        </div>
+
+        <section id="pillars">
+            <div class="section-header">
+                <span>Our Foundations</span>
+                <h2>Pillars of <em>Excellence</em></h2>
+            </div>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <h3>Academic Mastery</h3>
+                    <p>A rigorous curriculum that challenges students to think critically and solve complex global problems.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>Global Perspective</h3>
+                    <p>Fostering an environment where diverse cultures meet to create a unified world view.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>Integrity & Honor</h3>
+                    <p>Instilling the values of honesty and ethical leadership in every action our scholars take.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="programs" style="background: var(--surface);">
+            <div class="section-header">
+                <span>The Curriculum</span>
+                <h2>Academic <em>Pathways</em></h2>
+            </div>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <h3>Foundation</h3>
+                    <p>Ages 3-6. Sparking curiosity through play and structured exploration of the world around them.</p>
+                    <a href="school-academics2nd%20plan.html" style="color:var(--gold); text-decoration:none; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">View Program →</a>
+                </div>
+                <div class="program-card">
+                    <h3>Intermediate</h3>
+                    <p>Ages 7-13. Building strong academic foundations and identifying unique individual passions.</p>
+                    <a href="school-academics2nd%20plan.html" style="color:var(--gold); text-decoration:none; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">View Program →</a>
+                </div>
+                <div class="program-card">
+                    <h3>Senior Elite</h3>
+                    <p>Ages 14-18. Intensive university preparation and leadership training for global impact.</p>
+                    <a href="school-academics2nd%20plan.html" style="color:var(--gold); text-decoration:none; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">View Program →</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h4>30+</h4>
+                    <p>Years of Legacy</p>
+                </div>
+                <div class="stat-item">
+                    <h4>100%</h4>
+                    <p>Global Placements</p>
+                </div>
+                <div class="stat-item">
+                    <h4>1:8</h4>
+                    <p>Mentor Ratio</p>
+                </div>
+                <div class="stat-item">
+                    <h4>40+</h4>
+                    <p>Nationalities</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" style="background: var(--surface);">
+            <div class="section-header">
+                <span>Voices of Excellence</span>
+                <h2>Words of <em>Wisdom</em></h2>
+            </div>
+            <div class="testi-wrap">
+                <p class="testi-quote">"Aetheria Elite did not just teach me how to succeed in exams; it taught me how to lead with empathy and innovate with purpose."</p>
+                <div class="testi-author">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974" alt="Alumni">
+                    <div>
+                        <h5>Lord Victor Thorne</h5>
+                        <p>Alumni, Oxford University Scholar</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="inquiry">
+            <div class="section-header">
+                <span>Begin Your Legacy</span>
+                <h2>Inquire <em>Now</em></h2>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto; background: var(--surface); padding: 4rem; border: 1px solid var(--glass-border);">
+                <form onsubmit="event.preventDefault(); alert('Our Registrar will contact you shortly.');">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div>
+                            <label style="display:block; color:var(--gold); font-size:0.7rem; text-transform:uppercase; margin-bottom:0.5rem; letter-spacing:2px;">Scholar's Name</label>
+                            <input type="text" placeholder="Enter name" style="width:100%; background:transparent; border:none; border-bottom:1px solid var(--glass-border); padding:1rem 0; color:white; outline:none;">
+                        </div>
+                        <div>
+                            <label style="display:block; color:var(--gold); font-size:0.7rem; text-transform:uppercase; margin-bottom:0.5rem; letter-spacing:2px;">Desired Grade</label>
+                            <select style="width:100%; background:transparent; border:none; border-bottom:1px solid var(--glass-border); padding:1rem 0; color:white; outline:none;">
+                                <option style="background:#000">Foundation</option>
+                                <option style="background:#000">Intermediate</option>
+                                <option style="background:#000">Senior Elite</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-gold" style="width:100%; border:none; cursor:pointer;">Submit Inquire</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <a href="school-home2nd%20plan.html" class="footer-logo">AETHERIA</a>
+        <div class="footer-links">
+            <a href="school-about2nd%20plan.html">The Legacy</a>
+            <a href="school-academics2nd%20plan.html">Curriculum</a>
+            <a href="school-facilities2nd%20plan.html">Discover</a>
+            <a href="school-faculty2nd%20plan.html">Mentors</a>
+            <a href="school-staff2nd%20plan.html">Governance</a>
+            <a href="school-gallery2nd%20plan.html">The Estate</a>
+            <a href="school-life2nd%20plan.html">Life at Aetheria</a>
+            <a href="school-contact2nd%20plan.html">Inquiry</a>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:2px;">© 2025 AETHERIA ELITE. THE PINNACLE OF EDUCATION.</p>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            follower.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
+        });
+        document.querySelectorAll('a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && !href.startsWith('#') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    setTimeout(() => window.location.href = href, 800);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

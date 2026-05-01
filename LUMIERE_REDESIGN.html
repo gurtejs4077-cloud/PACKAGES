@@ -542,15 +542,13 @@ footer{background:rgba(6,6,8,.9);border-top:1px solid rgba(212,168,83,.08);paddi
     <span>LUMIÈRE</span>
     <div class="logo-dot"></div>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#" data-page="home" class="active" onclick="showPage('home');return false;">Home</a></li>
     <li><a href="#" data-page="portfolio" onclick="showPage('portfolio');return false;">Portfolio</a></li>
     <li><a href="#" data-page="team" onclick="showPage('team');return false;">Our Team</a></li>
     <li><a href="#" data-page="services" onclick="showPage('services');return false;">Services</a></li>
     <li><a href="#" data-page="contact" onclick="showPage('contact');return false;">Contact</a></li>
   </ul>
-        <div class="hamburger" id="hamburger" onclick="document.getElementById(\'navLinks\').classList.toggle(\'open\')"><span></span><span></span><span></span></div>
-        
   <div class="nav-right">
     <button class="btn-portal" onclick="openPortal()"><span>🔐 Client Portal</span></button>
     <button class="btn-book" onclick="showPage('booking')">Book Session</button>
@@ -1339,8 +1337,8 @@ function logoutPortal(){
 }
 
 /* ─── FORMS ─── */
-function submitBooking(){showToast('Enquiry Sent! ✦','Thank you! We'll confirm availability within 24 hours.')}
-function submitContact(){showToast('Message Received!','We'll respond to your message shortly.')}
+function submitBooking(){showToast('Enquiry Sent! ✦','Thank you! We\'ll confirm availability within 24 hours.')}
+function submitContact(){showToast('Message Received!','We\'ll respond to your message shortly.')}
 function showToast(title,msg){
   const t=document.getElementById('toast');
   document.getElementById('toastTitle').textContent=title;
@@ -1356,18 +1354,5 @@ document.querySelectorAll('.gallery-thumb').forEach((el,i)=>el.addEventListener(
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePortal()});
 </script>
 
-<audio id="bgMusic" loop>
-  <source src="sound.mp3" type="audio/mpeg">
-</audio>
-<script>
-  window.addEventListener('load', () => {
-    if (sessionStorage.getItem('musicPlaying') === 'true') {
-      const music = document.getElementById('bgMusic');
-      if (music) {
-        music.play().catch(e => console.log("Playback failed. Interaction may be required on this page."));
-      }
-    }
-  });
-</script>
 </body>
 </html>

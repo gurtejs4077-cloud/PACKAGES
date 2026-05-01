@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment | Aetheria Elite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Outfit:wght@100;200;300;400;500;600&family=Cinzel+Decorative:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="aetheria_school_logo.png">
+    <link rel="stylesheet" href="background-audio.css">
+    <script src="background-audio.js" defer></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --gold-gradient: linear-gradient(135deg, #f9e29c 0%, #d4af37 50%, #926d15 100%);
+            --text: #f5f5f7;
+            --text-muted: #86868b;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --ease: cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+        }
+
+        body {
+            background: transparent;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: none;
+            transition: opacity 0.8s var(--ease);
+        }
+
+        /* ── LUXURY BACKGROUND ── */
+        .fixed-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            background: linear-gradient(rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.85)), url('luxury_school_bg.png') center/cover no-repeat;
+            opacity: 1;
+        }
+
+        .ambient-light {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+        }
+
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+
+        #cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s ease-out;
+            opacity: 0.5;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            letter-spacing: 2px;
+        }
+
+        .logo img { width: 40px; height: 40px; }
+
+        nav ul { display: flex; gap: 3rem; list-style: none; }
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; transition: 0.4s; }
+        nav a:hover { color: var(--gold); }
+        .nav-cta { background: var(--gold-gradient); color: var(--bg) !important; padding: 12px 30px; font-weight: 600 !important; }
+
+        .sub-hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(5,5,5,0.7), rgba(5,5,5,0.7)), url('https://images.unsplash.com/photo-1523050335192-ce1de5577ff2?q=80&w=2070') center/cover;
+            padding-top: 100px;
+        }
+
+        .sub-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .sub-hero span {
+            color: var(--gold);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .content-container {
+            padding: 8rem 5vw;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admission-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 6rem;
+        }
+
+        .form-section {
+            background: var(--surface);
+            padding: 5rem;
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; height: 2px;
+            background: var(--gold-gradient);
+        }
+
+        .input-group { margin-bottom: 2.5rem; }
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text);
+            padding: 1rem 0;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--gold); }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--gold-gradient);
+            color: var(--bg);
+            border: none;
+            padding: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .submit-btn:hover { letter-spacing: 0.4em; box-shadow: 0 10px 30px var(--gold-glow); }
+
+        .info-panel {
+            padding: 2rem;
+        }
+
+        .info-card {
+            margin-bottom: 4rem;
+        }
+
+        .info-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        footer { padding: 8rem 5vw 4rem; background: #000; text-align: center; }
+        .footer-logo { font-family: 'Cinzel Decorative', cursive; font-size: 2rem; color: var(--gold); margin-bottom: 3rem; display: block; text-decoration: none; }
+        .footer-links { display: flex; justify-content: center; gap: 4rem; margin-bottom: 4rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-bg"></div>
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+    <div class="ambient-light"></div>
+    <div class="grain-overlay"></div>
+
+    <header>
+        <a href="school-home2nd%20plan.html" class="logo">
+            <img src="aetheria_school_logo.png" alt="Aetheria">
+            AETHERIA <span>ELITE</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="school-about2nd%20plan.html">The Legacy</a></li>
+                <li><a href="school-academics2nd%20plan.html">Curriculum</a></li>
+                <li><a href="school-faculty2nd%20plan.html">Mentors</a></li>
+                <li><a href="school-gallery2nd%20plan.html">The Estate</a></li>
+                <li><a href="school-admission2nd%20plan.html" style="color:var(--gold)">Enrollment</a></li>
+                <li><a href="school-contact2nd%20plan.html" class="nav-cta">Inquiry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="sub-hero">
+        <span>Admissions 2025—26</span>
+        <h1>Secure Your <em>Legacy</em></h1>
+    </div>
+
+    <div class="content-container">
+        <div class="admission-grid">
+            <div class="form-section">
+                <form onsubmit="event.preventDefault(); alert('Inquiry Sent to Aetheria Admissions.')">
+                    <div class="input-group">
+                        <label>Student's Full Name</label>
+                        <input type="text" placeholder="e.g. Julian Aether" required>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div class="input-group">
+                            <label>Grade Level</label>
+                            <select required style="background:var(--surface); color:var(--text); border:none; border-bottom:1px solid var(--glass-border); width:100%; padding:1rem 0;">
+                                <option value="">Select Grade</option>
+                                <option>Foundation (K-2)</option>
+                                <option>Intermediate (3-5)</option>
+                                <option>Senior (6-12)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Parent's Contact</label>
+                            <input type="tel" placeholder="+1 (000) 000-0000" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Your Inquiry</label>
+                        <textarea rows="4" placeholder="How may we guide you?" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Request Prospectus</button>
+                </form>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-card">
+                    <h3>The Selection Process</h3>
+                    <p>Admission to Aetheria Elite is a process of mutual discovery. We seek students who demonstrate not only academic promise but a unique spark of creative or leadership potential.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Private Tours</h3>
+                    <p>We invite distinguished families to experience our estate firsthand. Please mention your preferred date in the inquiry form.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="school-home2nd%20plan.html" class="footer-logo">AETHERIA</a>
+        <div class="footer-links">
+            <a href="school-about2nd%20plan.html">The Legacy</a>
+            <a href="school-academics2nd%20plan.html">Curriculum</a>
+            <a href="school-faculty2nd%20plan.html">Mentors</a>
+            <a href="school-gallery2nd%20plan.html">The Estate</a>
+            <a href="school-contact2nd%20plan.html">Inquiry</a>
+        </div>
+        <p class="copyright">© 2025 AETHERIA ELITE. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            follower.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
+        });
+        document.querySelectorAll('a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && !href.startsWith('#') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    setTimeout(() => window.location.href = href, 800);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
